@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterapp/src/screen/login_screen.dart';
+import 'ui/movie_list.dart';
+import 'package:flutterapp/src/screen/register_screen.dart';
 
 class App extends StatelessWidget {
   @override
@@ -7,8 +8,20 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: "log me in",
       home: Scaffold(
-        body: LoginScreen(),
+        body: RegisterScreen(),
       ),
     );
   }
 }
+//class App extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    // TODO: implement build
+//    return MaterialApp(
+//      theme: ThemeData.dark(),
+//      home: Scaffold(
+//        body: MovieList(),
+//      ),
+//    );
+//  }
+//}

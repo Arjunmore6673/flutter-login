@@ -8,22 +8,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20.0),
-      child: Form(
-        key: formKey, // you missed out on this!!!
-        child: Column(
-          children: <Widget>[
-            emailField(),
-            passwordField(),
-            raisedButton(),
-          ],
-        ),
-      ),
+        child: Card(
+          child: Padding(
+            padding: EdgeInsets.all(15),
+            child: Form(
+              child: Column(
+                children: <Widget>[
+                  emailField(),
+                  passwordField(),
+                  raisedButton(),
+                ],
+              ),
+            ),
+          )
+        )
     );
   }
 
@@ -45,17 +47,13 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget passwordField() {
     return TextFormField(
-        decoration: InputDecoration(
-          labelText: "password",
-        ),
-        validator: (value) {
-          if (value.length < 5)
-            return "Please enter valid password";
-          else
-            return null;
-        },
-        keyboardType: TextInputType.visiblePassword);
+      decoration: InputDecoration(
+        labelText: "Password",
+      ),
+      keyboardType: TextInputType.text,
+    );
   }
+
 
   Widget raisedButton() {
     return Padding(
@@ -63,9 +61,7 @@ class LoginScreenState extends State<LoginScreen> {
       child: RaisedButton(
         child: Text("Submit"),
         color: Colors.white,
-        onPressed: () {
-          formKey.currentState.validate();
-        },
+        onPressed: () {},
       ),
     );
   }
