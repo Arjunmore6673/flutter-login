@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'ui/movie_list.dart';
-import 'package:flutterapp/src/screen/register_screen.dart';
+import 'package:flutterapp/srcc/screen/register_screen.dart';
 
 class App extends StatelessWidget {
   @override

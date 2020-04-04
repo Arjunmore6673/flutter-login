@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterapp/src/aap.dart';
-import 'package:flutterapp/src/screen/register_screen.dart';
-import 'package:flutterapp/src/screen/login_screen.dart';
-import 'package:flutterapp/src/screen/splash_screen.dart';
+import 'package:flutterapp/srcc/aap.dart';
+import 'package:flutterapp/srcc/screen/register_screen.dart';
+import 'package:flutterapp/srcc/screen/login_screen.dart';
+import 'package:flutterapp/srcc/screen/splash_screen.dart';
 
 
 //void main() {
