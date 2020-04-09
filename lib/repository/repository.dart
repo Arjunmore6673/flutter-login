@@ -1,19 +1,18 @@
 import 'dart:async';
 
-import 'package:flutterapp/src/model/item_model.dart';
-import 'package:flutterapp/src/model/movie_detail_model.dart';
-import 'package:flutterapp/src/model/movie_image_model.dart';
-
-import 'movie_api_provider.dart';
+import 'package:flutterapp/model/RegistrationModel.dart';
+import 'RegistrationProvider.dart';
 
 class Repository {
-  final moviesApiProvider = MovieApiProvider();
+  final moviesApiProvider = RegistrationProvider();
 
-  Future<MovieDetailModel> fetchMovieDetail(int movieId) => moviesApiProvider.fetchMovieDetail(movieId);
-
-  Future<MovieImageModel> fetchMovieImages(int movieId) => moviesApiProvider.fetchMovieImages(movieId);
-
-  Future<ItemModel> fetchMovieList(String type) => moviesApiProvider.fetchMovieList(type);
-
-
+//
+//  Future<MovieDetailModel> fetchMovieDetail(int movieId) => moviesApiProvider.fetchMovieDetail(movieId);
+//
+//  Future<MovieImageModel> fetchMovieImages(int movieId) => moviesApiProvider.fetchMovieImages(movieId);
+//
+//  Future<ItemModel> fetchMovieList(String type) => moviesApiProvider.fetchMovieList(type);
+//
+  Future<int> submitRegistration(RegistrationModel model) =>
+      moviesApiProvider.saveRegistration(model);
 }

@@ -1,8 +1,7 @@
-import 'package:flutterapp/src/model/base_model.dart';
-import 'package:flutterapp/src/resources/repository.dart';
+import 'package:flutterapp/repository/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-abstract class BaseBloc<T extends BaseModel> {
+abstract class BaseBloc<T> {
   final repository = Repository();
   final fetcher = PublishSubject<T>();
 

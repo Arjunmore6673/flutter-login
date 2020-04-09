@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp/blocs/registration_bloc.dart';
+import 'package:flutterapp/model/RegistrationModel.dart';
+import 'package:flutterapp/screens/feedback_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -12,27 +15,38 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-          child: Padding(
-        child: Form(
-          key: formKey, // you missed out on this!!!
-          child: Column(
-            children: <Widget>[
-              name(),
-              emailField(),
-              passwordField(),
-              state(),
-              city(),
-              village(),
-              mobile(),
-              raisedButton(),
-            ],
-          ),
-        ),
-        padding: EdgeInsets.all(20),
-      )),
-    );
+    return StreamBuilder(
+        stream: registrationBloc.registrationResponse,
+        builder: (context, AsyncSnapshot<int> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data == 200) {
+               return FeedbackScreen();
+            } else {
+              return Text("som  ething fuckied ");
+            }
+          }
+          return Container(
+            child: Card(
+                child: Padding(
+              child: Form(
+                key: formKey, // you missed out on this!!!
+                child: Column(
+                  children: <Widget>[
+                    name(),
+                    emailField(),
+                    passwordField(),
+                    state(),
+                    city(),
+                    village(),
+                    mobile(),
+                    raisedButton(),
+                  ],
+                ),
+              ),
+              padding: EdgeInsets.all(20),
+            )),
+          );
+        });
   }
 
   Widget state() {
@@ -147,7 +161,19 @@ class RegisterScreenState extends State<RegisterScreen> {
         child: Text("Register"),
         color: Colors.white,
         onPressed: () {
-          formKey.currentState.validate();
+//          formKey.currentState.validate();
+          registrationBloc.saveRegistration(new RegistrationModel(
+              "Arjun",
+              "32",
+              "email@gmail.com",
+              "password",
+              "gender",
+              "1996-01-15",
+              "gender",
+              "c",
+              "state",
+              "country",
+              "3"));
         },
       ),
     );

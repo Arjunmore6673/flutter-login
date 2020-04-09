@@ -1,26 +1,22 @@
-class WeatherModel{
-  final temp;
-  final pressure;
-  final  humidity;
-  final temp_max;
-  final  temp_min;
+class LoginModel {
+  final username;
+  final password;
 
+  LoginModel(this.username, this.password);
 
-  double get getTemp => temp-272.5;
-  double get getMaxTemp => temp_max-272.5;
-  double get getMinTemp=> temp_min -272.5;
-
-  WeatherModel(this.temp, this.pressure, this.humidity, this.temp_max, this.temp_min);
-
-
-  factory WeatherModel.fromJson(Map<String,dynamic> json){
-    return WeatherModel(
-      json["temp"],
-      json["pressure"],
-      json["humidity"],
-      json["temp_max"],
-      json["temp_min"]
-    );
+  factory LoginModel.fromJson(Map<String, dynamic> json) {
+    return LoginModel(json["username"], json["password"]);
   }
+
+   String get getUserName =>  this.username;
+   String get getPass =>  this.password;
+
+    Map toMap() {
+      var map = new Map<String, dynamic>();
+      map["username"] = username;
+      map["password"] = password;
+      return map;
+  }
+
 
 }

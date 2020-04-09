@@ -12,12 +12,64 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
-  rxdart: ^0.18.0
-  http: ^0.12.0+1
+  rxdart: ^0.23.0
+  flutter_rating: ^0.0.2
+  carousel_slider: ^1.3.0
+  font_awesome_flutter: ^8.5.0
+  smooth_star_rating: ^1.0.3
+  intl: ^0.16.0
+  bloc: ^3.0.0
+  flutter_bloc: ^3.2.0
+  flare_flutter: ^1.7.1
+  http: ^0.12.0+2
+  equatable: ^0.6.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
   uses-material-design: true
+
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+    - assets/design_course/
+    - assets/fitness_app/
+    - assets/hotel/
+    - assets/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: WorkSans
+      fonts:
+        - asset: assets/fonts/WorkSans-Regular.ttf
+        - asset: assets/fonts/WorkSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/WorkSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/WorkSans-Bold.ttf
+          weight: 700
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Bold.ttf
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 400
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+
+
 
