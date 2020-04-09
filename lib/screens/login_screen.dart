@@ -49,111 +49,102 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     final Size screenSize = media.size;
-    return Scaffold(
-        //key: this.scaffoldKey,
-        appBar: AppBar(
-          title: Text('Login'),
-        ),
-        body: Container(
-          padding: EdgeInsets.all(20.0),
-          child: BlocListener<LoginBloc, LoginState>(
-            listener: (context, state) {
-              if (state is LoginFailure) {
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${state.error}'),
-                    backgroundColor: Colors.red,
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      child: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginFailure) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text('${state.error}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            return Form(
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.all(20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FlutterLogo(
+                            size: 100.0,
+                          ),
+                        ],
+                      )),
+                  Container(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: emailControl,
+                        // Use email input type for emails.
+                        decoration: InputDecoration(
+                            hintText: 'you@example.com',
+                            labelText: 'E-mail Address',
+                            icon: new Icon(Icons.email)),
+                        validator: this._validateEmail,
+                      )),
+                  Container(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: new TextFormField(
+                        obscureText: true,
+                        // Use secure text for passwords.
+                        controller: passControl,
+                        decoration: new InputDecoration(
+                            hintText: 'Password',
+                            labelText: 'Enter your password',
+                            icon: new Icon(Icons.lock)),
+                        validator: this._validatePassword,
+                        onSaved: (String value) {}),
                   ),
-                );
-              }
-            },
-            child: BlocBuilder<LoginBloc, LoginState>(
-              builder: (context, state) {
-                return Form(
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                          padding: EdgeInsets.all(20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              FlutterLogo(
-                                size: 100.0,
-                              ),
-                            ],
-                          )),
-                      Container(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            controller: emailControl,
-                            // Use email input type for emails.
-                            decoration: InputDecoration(
-                                hintText: 'you@example.com',
-                                labelText: 'E-mail Address',
-                                icon: new Icon(Icons.email)),
-                            validator: this._validateEmail,
-                          )),
-                      Container(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: new TextFormField(
-                            obscureText: true,
-                            // Use secure text for passwords.
-                            controller: passControl,
-                            decoration: new InputDecoration(
-                                hintText: 'Password',
-                                labelText: 'Enter your password',
-                                icon: new Icon(Icons.lock)),
-                            validator: this._validatePassword,
-                            onSaved: (String value) {}),
-                      ),
-                      Container(
-                        width: screenSize.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              height: 50.0,
-                              margin:
-                                  const EdgeInsets.only(left: 10.0, top: 30.0),
-                              child: RaisedButton(
-                                child: Text(
-                                  'Login',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: state is! LoginLoading
-                                    ? _onLoginButtonPressed
-                                    : null,
-                                color: Colors.deepPurple,
-                              ),
+                  Container(
+                    width: screenSize.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: 50.0,
+                          margin: const EdgeInsets.only(left: 10.0, top: 30.0),
+                          child: RaisedButton(
+                            child: Text(
+                              'Login',
+                              style: TextStyle(color: Colors.white),
                             ),
-                            Container(
-                              height: 50.0,
-                              margin:
-                                  const EdgeInsets.only(left: 20.0, top: 30.0),
-                              child: RaisedButton(
-                                child: Text(
-                                  'Registration',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () {},
-                                color: Colors.deepPurple,
-                              ),
-                            ),
-                          ],
+                            onPressed: state is! LoginLoading
+                                ? _onLoginButtonPressed
+                                : null,
+                            color: Colors.deepPurple,
+                          ),
                         ),
-                      ),
-                    ],
+                        Container(
+                          height: 50.0,
+                          margin: const EdgeInsets.only(left: 20.0, top: 30.0),
+                          child: RaisedButton(
+                            child: Text(
+                              'Registration',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {},
+                            color: Colors.deepPurple,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-        ));
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
-//   _navigateRegistration() {}
-// }
 
 // //                new Container(
 // //                  width: screenSize.width,
