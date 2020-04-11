@@ -6,6 +6,7 @@ import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/loading.dart';
 import 'package:flutterapp/screens/login_page.dart';
 import 'package:flutterapp/screens/navigation_home_screen.dart';
+import 'package:flutterapp/screens/relation_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
 
 import 'blocs/auth_bloc/auth_bloc.dart';
@@ -75,12 +76,14 @@ class MyApp extends StatelessWidget {
             builder: (context, state) {
               if (state is AuthenticationUninitialized) {
                 return SplashPage();
-              } 
+              }
               if (state is AuthenticationAuthenticated) {
-                return NavigationHomeScreen();
+                 return RelationScreen();
+                // return NavigationHomeScreen();
               }
               if (state is AuthenticationUnauthenticated) {
-                return LoginPage(userRepository: userRepository);
+              //  return RelationScreen();
+                 return LoginPage(userRepository: userRepository);
               }
               if (state is AuthenticationLoading) {
                 return LoadingIndicator();

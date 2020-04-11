@@ -1,0 +1,77 @@
+{
+    "success": true,
+    "message": "success",
+    "data": [
+        {
+            "id": 7,
+            "image": null,
+            "mobile": "3331231",
+            "email": "rock32@gmail.com",
+            "status": "ACTIVE",
+            "name": "arjun@1993",
+            "gender": "male",
+            "city": "pune",
+            "state": "maharashtra",
+            "country": "India",
+            "pin": 411058,
+            "userImage": null,
+            "relation": "FATHER",
+            "doc": null,
+            "hisRelations": [
+                {
+                    "id": 14,
+                    "image": null,
+                    "mobile": "23331232321",
+                    "email": "arj2u2n@gmail.com",
+                    "password": "$2a$10$8v/UBRk52K0HjGpjQ/yUPuOCF3Q1gRI/DmcNvLCJJaK/SKnWlCrs.",
+                    "status": "ACTIVE",
+                    "name": "arjun@1993",
+                    "gender": "male",
+                    "dob": "2012-09-15",
+                    "address": null,
+                    "city": "pune",
+                    "state": "maharashtra",
+                    "country": "India",
+                    "pin": 411058,
+                    "code": "ar0478",
+                    "userRelation": []
+                },
+                {
+                    "id": 9,
+                    "image": null,
+                    "mobile": "333123321",
+                    "email": "arjun@gmail.com",
+                    "password": "$2a$10$AoR/3FXjTHNrNKxvHdlwI.QvYLr8Rr2IQRAj0X.iAY1NHYs5iyowK",
+                    "status": "ACTIVE",
+                    "name": "arjun@1993",
+                    "gender": "male",
+                    "dob": "2012-09-15",
+                    "address": null,
+                    "city": "pune",
+                    "state": "maharashtra",
+                    "country": "India",
+                    "pin": 411058,
+                    "code": "ar02",
+                    "userRelation": []
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "image": null,
+            "mobile": "23331232321",
+            "email": "arj2u2n@gmail.com",
+            "status": "ACTIVE",
+            "name": "arjun@1993",
+            "gender": "male",
+            "city": "pune",
+            "state": "maharashtra",
+            "country": "India",
+            "pin": 411058,
+            "userImage": null,
+            "relation": "MOTHER",
+            "doc": null,
+            "hisRelations": null
+        }
+    ]
+}

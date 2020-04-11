@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_event.dart';
 import 'package:flutterapp/blocs/bloc_login/login_state.dart';
-import 'package:flutterapp/screens/loading.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
