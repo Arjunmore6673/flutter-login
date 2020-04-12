@@ -1,3 +1,4 @@
+import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
@@ -5,6 +6,10 @@ import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
+import 'package:flutterapp/screens/add_relation_screen.dart';
+
+import 'common/ExpandableCardCommon.dart';
+import 'common/ProfileImgAndDetailsCommon.dart';
 
 class RelationScreen extends StatefulWidget {
   RelationScreen({Key key}) : super(key: key);
@@ -14,172 +19,210 @@ class RelationScreen extends StatefulWidget {
 }
 
 class RelationScreenState extends State<RelationScreen> {
+  String i =
+      "https://lh3.googleusercontent.com/proxy/icdlNc79c98KgJ3xsNW6kaMOqfJwMD13268O9PtXdadc8mYDyby9ai_Pb_h7Yp0LQDNsFcgMc-_2TS-msAtLZ-kGxsz_8hJ5gPF4ikP0cyrxO8PLC63tH2f-0sKVLUFzjd5Ld_dWkh9Z8wjcLtyICgBLjSeroYhZe8UXc4_i_WbCtnJn";
   @override
   Widget build(BuildContext context) {
     //final relnBloc = BlocProvider.of<RelationBloc>(context);
+    return Scaffold(
+        body: DefaultBottomBarController(
+      child: Page(),
+    ));
+  }
+}
 
-    return BlocProvider(
+class Page extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).canvasColor,
+      body: BlocProvider(
         create: (BuildContext context) => RelationBloc(UserRepository()),
-        child:
-            BlocBuilder<RelationBloc, RelationState>(builder: (context, state) {
-          if (state is RelationEmptyState) {
-            BlocProvider.of<RelationBloc>(context)
-                .add(RelationListPressed(userId: 1));
-            return Text("EMpty");
-          }
-          if (state is RelationLoadingState) {
-            return Text("Loading..");
-          }
-          if (state is RelationLoadFailureState) {
-            return Text("error..");
-          }
-          if (state is RelationLoadedState) {
-            RelationModel userModel = state.data["user"];
-            print(userModel.toString());
-            return Column(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
+        child: Container(
+          child: BlocListener<RelationBloc, RelationState>(
+            /// listener to listen failure events
+            listener: (context, state) {
+              if (state is RelationLoadFailureState) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${state.error}'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: BlocBuilder<RelationBloc, RelationState>(
+              builder: (context, state) {
+                if (state is RelationEmptyState) {
+                  BlocProvider.of<RelationBloc>(context)
+                      .add(RelationListPressed(userId: 1));
+                  return Text("EMPTY");
+                }
+                if (state is RelationLoadingState) {
+                  return Text("Loading..");
+                }
+                if (state is RelationLoadFailureState) {
+                  return Text("error..");
+                }
+                if (state is RelationLoadedState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      CircleAvatar(
-                        radius: 90.0,
-                        backgroundColor: Colors.red,
-                      ),
-                      Card(
-                        elevation: 10,
-                        margin: EdgeInsets.all(10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              // topRight: Radius.circular(40.0),
-                              ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text(
-                                '${userModel.getName}',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.purple,
-                                ),
-                              ),
-                              Text(
-                                '${userModel.getEmail}',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.purple,
-                                ),
-                              ),
-                              Text(
-                                '${userModel.mobile}',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.purple,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
+                      Expanded(
+                          flex: 1, child: getFirstBloc(state.data["user"])),
+
+                      /// state.data is map of  mama/mami,  kaka/mavshi, brother/sister
+                      Expanded(flex: 2, child: getThirdBloc(state.data)),
                     ],
-                  ),
-                  flex: 1,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: state.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return circleAvtar(state.data["relations"], index);
-                    },
-                  ),
-                  flex: 1,
-                ),
-              ],
-            );
-          }
-          return Text("initial ");
-        }));
-  }
+                  );
+                }
+                return Text("initial ");
+              },
+            ),
+          ),
+        ),
+      ),
 
-  Widget getListView(data) {
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      children: <Widget>[
-        SizedBox(width: 10),
-        SizedBox(width: 10),
-      ],
-    );
-  }
+      //Set to true for bottom appbar overlap body content
+      extendBody: true,
 
-  Widget getContainer() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-      height: 220,
-      width: double.maxFinite,
-      child: Card(
-          elevation: 5,
+      // Lets use docked FAB for handling state of sheet
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: GestureDetector(
+        // Set onVerticalDrag event to drag handlers of controller for swipe effect
+        onVerticalDragUpdate: DefaultBottomBarController.of(context).onDrag,
+        onVerticalDragEnd: DefaultBottomBarController.of(context).onDragEnd,
+        child: FloatingActionButton.extended(
+          label: Text("Add"),
+          elevation: 2,
+          backgroundColor: Colors.deepOrange,
+          foregroundColor: Colors.white,
+          //Set onPressed event to swap state of bottom bar
+          onPressed: () => DefaultBottomBarController.of(context).swap(),
+        ),
+      ),
+
+      // Actual expandable bottom bar
+      bottomNavigationBar: BottomExpandableAppBar(
+        expandedHeight: 550,
+        horizontalMargin: 16,
+        shape: AutomaticNotchedShape(
+            RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
+        expandedBackColor: Theme.of(context).backgroundColor,
+        expandedBody: Center(
+          child: AddRelation(),
+        ),
+        bottomAppBarBody: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Row(
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                // child: circleAvtar(),
+              Expanded(
+                child: Text(
+                  "Tets",
+                  textAlign: TextAlign.center,
+                ),
               ),
-              // Expanded(child: personDetails()),
+              Spacer(
+                flex: 2,
+              ),
+              Expanded(
+                child: Text(
+                  "Stet",
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
-          )),
+          ),
+        ),
+      ),
     );
   }
 
-  Widget circleAvtar(List<RelationModel> data, int index) {
-    return Column(
+  Widget getFirstBloc(RelationModel userModel) {
+    return ProfileImgAndDetails(userModel: userModel);
+  }
+
+  Widget getSecondBloc() {
+    return Container(
+      padding: EdgeInsets.all(10),
+      // decoration: BoxDecoration(color: Colors.red),
+      child: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: RaisedButton(
+            color: Colors.purple,
+            onPressed: () {},
+            child: Text(
+              "Add Relation",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getThirdBloc(Map<String, Object> data) {
+    List<RelationModel> mamaMami = data["mamaMami"];
+    List<RelationModel> kakaMavshi = data["kakaMavshi"];
+    List<RelationModel> broSis = data["broSis"];
+    List<RelationModel> daji = data["daji"];
+    List<RelationModel> other = data["other"];
+
+    return ListView(
       children: <Widget>[
-        CircleAvatar(
-          radius: 90.0,
-          backgroundColor: Colors.transparent,
+        ExpandableCardCommon(
+          length: mamaMami.length,
+          text: "MAMA / MAMI",
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: mamaMami.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ProfileImgAndDetails(userModel: mamaMami[index]);
+            },
+          ),
         ),
-        personDetails(data, index)
-      ],
-    );
-  }
 
-  Widget personDetails(List<RelationModel> data, int index) {
-    return Card(
-      elevation: 10,
-      margin: EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            // topRight: Radius.circular(40.0),
-            ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(
-              '${data[index].getName}',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.purple,
-              ),
-            ),
-            Text(
-              "Mama",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.purple,
-              ),
-            ),
-          ],
+        /// second view
+        ExpandableCardCommon(
+          length: kakaMavshi.length,
+          text: "KAKA / MAVSHI",
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: kakaMavshi.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ProfileImgAndDetails(userModel: kakaMavshi[index]);
+            },
+          ),
         ),
-      ),
+
+        /// third view
+        ExpandableCardCommon(
+          length: broSis.length,
+          text: "BROTHER / SISTER",
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: broSis.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ProfileImgAndDetails(userModel: broSis[index]);
+            },
+          ),
+        ),
+
+        /// FOURTH view
+        ExpandableCardCommon(
+          length: other.length,
+          text: "OTHER",
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: other.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ProfileImgAndDetails(userModel: other[index]);
+            },
+          ),
+        ),
+      ],
     );
   }
 }

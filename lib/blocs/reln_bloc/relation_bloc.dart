@@ -18,17 +18,36 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
         yield RelationLoadingState();
 
         /// getting relation list
-        List model = await userRepository.getRelationList(userId: 1);
+        Map<String, Object> model =
+            await userRepository.getRelationList(userId: 1);
 
         /// getting relation list
         RelationModel user = await userRepository.getUserDetails();
 
         ///puttin in map
-        Map<String, Object> map = new Map();
-        map["user"] = user;
-        map["relations"] = model;
+        model["user"] = user;
 
-        yield RelationLoadedState(data: map);
+        yield RelationLoadedState(data: model);
+      } catch (e) {
+        print(e);
+        yield RelationLoadFailureState(error: e.toString());
+      }
+    }
+
+    if (event is RelationAddPressed) {
+      try {
+        yield RelationLoadingState();
+
+        String result = await userRepository.add_relation(
+          name: event.name,
+          mobile: event.mobile,
+          address: event.address,
+          relation: event.relation,
+        );
+        print("00-" + result);
+
+        /// RelationAddedState
+        yield RelationAddedState();
       } catch (e) {
         print(e);
         yield RelationLoadFailureState(error: e.toString());

@@ -1,0 +1,16 @@
+done realation design part.
+group by mama/mami,  kaka/mavshi, brother/sister
+
+api all userRelations
+i can do that on backend side and frontend side also
+
+relations [
+            { relationType : "something" },
+            { relationType : "something" },   
+        ]
+
+make group logic in repository 
+  4 map props of List<Model> type   15 mins 
+one method to check and add in List 15 mins 
+return that in screen  15 mins
+integrate that in screen 15mins

@@ -34,16 +34,71 @@ class UserRepository {
     return token;
   }
 
+  Future<String> add_relation({
+    @required String name,
+    @required String mobile,
+    @required String address,
+    @required String relation,
+  }) async {
+    // await Future.delayed(Duration(seconds: 1));
+    Response response = await http.post(
+      "http://192.168.43.89:8001/api/secured/add_relation",
+      headers: headers,
+      body: json.encode(
+        {
+          "name": name,
+          "mobile": mobile,
+          "address": address,
+          "relation": relation
+        },
+      ),
+    );
+    final res = json.decode(response.body);
+    print("----------------");
+    print(res);
+    print("----------------");
+    return 'token';
+  }
+
   /// get relation list of user
-  Future<List<RelationModel>> getRelationList({@required int userId}) async {
+  Future<Map<String, Object>> getRelationList({@required int userId}) async {
     Response response = await http.get(
       "http://192.168.43.89:8001/api/secured/get_nested",
       headers: headers,
     );
     final res = json.decode(response.body);
     final data = res["data"] as List;
-    List model = data.map((m) => RelationModel.fromJson2(m)).toList();
-    return model;
+    List<RelationModel> model =
+        data.map((m) => RelationModel.fromJson2(m)).toList();
+    return await getFiteredList(model);
+  }
+
+  Future<Map<String, Object>> getFiteredList(List<RelationModel> model) async {
+    Map<String, Object> map = new Map();
+    List<RelationModel> mamaMami = [];
+    List<RelationModel> kakaMavshi = [];
+    List<RelationModel> broSis = [];
+    List<RelationModel> daji = [];
+    List<RelationModel> other = [];
+    model.forEach((obj) => {
+          if (obj.getRelation == "MAMA" || obj.getRelation == "MAMI")
+            {mamaMami.add(obj)}
+          else if (obj.getRelation == "KAKA" || obj.getRelation == "MAVSHI")
+            {kakaMavshi.add(obj)}
+          else if (obj.getRelation == "BROTHER" || obj.getRelation == 'SISTER')
+            {broSis.add(obj)}
+          else if (obj.getRelation == "DAJI")
+            {daji.add(obj)}
+          else
+            {other.add(obj)}
+        });
+
+    map["mamaMami"] = mamaMami;
+    map["kakaMavshi"] = kakaMavshi;
+    map["broSis"] = broSis;
+    map["daji"] = daji;
+    map["other"] = other;
+    return map;
   }
 
   Future<void> deleteToken() async {
@@ -78,6 +133,7 @@ class UserRepository {
     await prefs.setString(Constants.USER_MOBILE, da.getMobile);
     await prefs.setString(Constants.USER_EMAIL, da.getEmail);
     await prefs.setString(Constants.USER_RELATION, da.getRelation);
+    await prefs.setString(Constants.USER_IMAGE, da.getImage);
   }
 
   getUserDetails() async {
@@ -88,6 +144,7 @@ class UserRepository {
       prefs.getString(Constants.USER_NAME),
       prefs.getString(Constants.USER_EMAIL),
       prefs.getString(Constants.USER_RELATION),
+      prefs.getString(Constants.USER_IMAGE),
     );
   }
 }

@@ -5,4 +5,5 @@ class Constants {
   static const String USER_EMAIL = 'USER_EMAIL';
   static const String USER_MOBILE = 'USER_MOBILE';
   static const String USER_RELATION = 'USER_RELATION';
+  static const String USER_IMAGE ='USER_IMAGE';
 }

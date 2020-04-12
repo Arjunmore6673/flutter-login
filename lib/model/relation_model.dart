@@ -5,6 +5,7 @@ class RelationModel {
   final String name;
   final String email;
   final String relation;
+  final String image;
 
   RelationModel(
     this.id,
@@ -12,6 +13,7 @@ class RelationModel {
     this.name,
     this.email,
     this.relation,
+    this.image,
   );
 
   String get getName => this.name;
@@ -19,6 +21,7 @@ class RelationModel {
   String get getMobile => this.mobile;
   String get getRelation => this.relation;
   String get getEmail => this.email;
+  String get getImage => this.image;
 
   factory RelationModel.fromJson(Map<String, dynamic> json) {
     return RelationModel(
@@ -27,6 +30,7 @@ class RelationModel {
       json["name"],
       json["email"],
       json["relation"],
+      json["image"],
     );
   }
 
@@ -37,6 +41,7 @@ class RelationModel {
       json["name"],
       json["email"],
       json["relation"],
+      json["image"],
     );
   }
 

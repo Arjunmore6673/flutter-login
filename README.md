@@ -1,16 +1,30 @@
-# flutterapp
+# New Features
 
-A new Flutter application.
+- Show details of realtion => DONE
+- Add relation =>
+- view relation profile separtely
+- Contact list get and save in db relation automatically
 
-## Getting Started
+# Add Relation 5:10 pm to 6:15 pm
 
-This project is a starting point for a Flutter application.
+- create new screen 20 mins ...DONE
+- add flow using bloc 15 mins ...NOT DONE
+- add api 15 mins...NOT DONE
+- integrate api 15 mins ...NOT DONE
+# RUNNING BEHIND FINISH TILL 7:00 done
+- add flow using bloc 15 mins
+- add api 15 mins
+- integrate api 15 mins
 
-A few resources to get you started if this is your first Flutter project:
+<!-- # completed
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# stated At 2:57 should complete at 4:00 Pm
+## make group logic in repository
+- 4 map props of List<Model> type   15 mins  :heavy_check_mark:
+- ne method to check and add in List 15 mins :heavy_check_mark:
+- return that in screen  15 mins :heavy_check_mark:
+- integrate that in screen 15mins :heavy_check_mark:
+- integrate that in screen 15mins
+- [ ] Mercury -->
+<!-- 
+:heavy_check_mark: | :white_check_mark: | :heavy_check_mark: -->

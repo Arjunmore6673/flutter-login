@@ -18,6 +18,11 @@ class RelationLoadedState extends RelationState {
   List<Object> get props => [data];
 }
 
+class RelationAddedState extends RelationState {
+  @override
+  List<Object> get props => [];
+}
+
 class RelationLoadFailureState extends RelationState {
   final String error;
   const RelationLoadFailureState({@required this.error});
