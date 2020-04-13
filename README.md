@@ -5,16 +5,31 @@
 - view relation profile separtely
 - Contact list get and save in db relation automatically
 
-# Add Relation 5:10 pm to 6:15 pm
+# Tasks
 
+## - Add relation api integration 15 mins 10:40 To 10:55
+- view profile separately 
+  - new screen 10mins
+  - design search 15mins 
+  - navigation 15min
+  - fetching data 15mins
+
+
+
+
+
+<!-- # Add Relation 5:10 pm to 6:15 pm
 - create new screen 20 mins ...DONE
 - add flow using bloc 15 mins ...NOT DONE
-- add api 15 mins...NOT DONE
+- add api 15 mins...NOT DONE  .. DONE
 - integrate api 15 mins ...NOT DONE
 # RUNNING BEHIND FINISH TILL 7:00 done
-- add flow using bloc 15 mins
-- add api 15 mins
-- integrate api 15 mins
+- add flow using bloc 15 mins.. DONE
+- add api 15 mins.. DONE
+- integrate api 15 mins.. DONE -->
+
+
+
 
 <!-- # completed
 

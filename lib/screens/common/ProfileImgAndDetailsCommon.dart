@@ -17,7 +17,9 @@ class ProfileImgAndDetails extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        CircleAvatarCommon(userModel.image),
+        CircleAvatarCommon(userModel.image == null
+            ? 'https://thehuboncanal.org/wp-content/uploads/2016/11/FEMALE-PERSON-PLACEHOLDER.jpg'
+            : userModel.image),
         CardCommon(
           child: UserDeatils(mainTitle: userModel.name, widgets: [
             Text(

@@ -11,7 +11,7 @@ class UserRepository {
   Map<String, String> headers = {
     "Content-type": "application/json",
     "Authorization":
-        "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwidXNlcm5hbWUiOiJyb2NrQGdtYWlsLmNvbSIsImlkIjoiOCIsInN0YXR1cyI6IkFDVElWRSJ9.J55PM4eS7_AZAmcduFahZN146l_Srv03YP7TUb1HZVgPjFfXIPdrvbRWSOAe33dF5U_rrwD2f3NyoeMlHTVE6Q",
+        "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzMCIsInVzZXJuYW1lIjoicm9ja2FqbUBnbWFpbC5jb20iLCJpZCI6IjMwIiwic3RhdHVzIjoiQUNUSVZFIn0.xAz8uKaa0kqlsvm0xtZom07eHd6a9Pp1Z8p12fxzYGvmd6l14TXnEukPDBylNxSjKsWNL4j6JKzJ6iDd2kTPQA",
   };
 
   Future<String> authenticate({
@@ -23,7 +23,7 @@ class UserRepository {
       "http://192.168.43.89:8001/auth/login",
       headers: headers,
       body: json.encode(
-        {"username": "rock@gmail.com", "password": "12345"},
+        {"username": "rockajm@gmail.com", "password": "12345"},
       ),
     );
     final res = json.decode(response.body);
@@ -42,14 +42,17 @@ class UserRepository {
   }) async {
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
-      "http://192.168.43.89:8001/api/secured/add_relation",
+      "http://192.168.43.89:8001/api/secured/add_relation_user",
       headers: headers,
       body: json.encode(
         {
-          "name": name,
-          "mobile": mobile,
-          "address": address,
-          "relation": relation
+          "user": {
+            "name": name,
+            "mobile": mobile,
+            "email": 'rock1333@gmail.com',
+            "city": address
+          },
+          "relation":"BROTHER"
         },
       ),
     );
