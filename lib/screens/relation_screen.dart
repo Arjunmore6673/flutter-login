@@ -7,6 +7,7 @@ import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/add_relation_screen.dart';
+import 'package:flutterapp/screens/view_profile.dart';
 
 import 'common/ExpandableCardCommon.dart';
 import 'common/ProfileImgAndDetailsCommon.dart';
@@ -167,11 +168,11 @@ class Page extends StatelessWidget {
     List<RelationModel> mamaMami = data["mamaMami"];
     List<RelationModel> kakaMavshi = data["kakaMavshi"];
     List<RelationModel> broSis = data["broSis"];
-    List<RelationModel> daji = data["daji"];
     List<RelationModel> other = data["other"];
 
     return ListView(
       children: <Widget>[
+
         ExpandableCardCommon(
           length: mamaMami.length,
           text: "MAMA / MAMI",
@@ -179,7 +180,12 @@ class Page extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: mamaMami.length,
             itemBuilder: (BuildContext context, int index) {
-              return ProfileImgAndDetails(userModel: mamaMami[index]);
+              return ProfileImgAndDetails(
+                userModel: mamaMami[index],
+                onPress: () {
+                  onPressFunction(context, mamaMami[index]);
+                },
+              );
             },
           ),
         ),
@@ -192,7 +198,12 @@ class Page extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: kakaMavshi.length,
             itemBuilder: (BuildContext context, int index) {
-              return ProfileImgAndDetails(userModel: kakaMavshi[index]);
+              return ProfileImgAndDetails(
+                userModel: kakaMavshi[index],
+                onPress: () {
+                  onPressFunction(context, kakaMavshi[index]);
+                },
+              );
             },
           ),
         ),
@@ -205,7 +216,12 @@ class Page extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: broSis.length,
             itemBuilder: (BuildContext context, int index) {
-              return ProfileImgAndDetails(userModel: broSis[index]);
+              return ProfileImgAndDetails(
+                userModel: broSis[index],
+                onPress: () {
+                  onPressFunction(context, broSis[index]);
+                },
+              );
             },
           ),
         ),
@@ -218,11 +234,23 @@ class Page extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: other.length,
             itemBuilder: (BuildContext context, int index) {
-              return ProfileImgAndDetails(userModel: other[index]);
+              return ProfileImgAndDetails(
+                userModel: other[index],
+                onPress: () {
+                  onPressFunction(context, other[index]);
+                },
+              );
             },
           ),
         ),
       ],
+    );
+  }
+
+  onPressFunction(BuildContext context, RelationModel model) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ViewProfile(model: model)),
     );
   }
 }

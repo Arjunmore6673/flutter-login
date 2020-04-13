@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/model/relation_model.dart';
 
 class RelationEvents extends Equatable {
   @override
@@ -26,4 +27,20 @@ class RelationAddPressed extends RelationEvents {
 
   @override
   List<Object> get props => [name, mobile, address, relation];
+}
+
+class RelationGetSinglePressed extends RelationEvents {
+  final int id;
+  RelationGetSinglePressed({@required this.id});
+
+  @override
+  List<Object> get props => [id];
+}
+
+class RelationStoreSinglePressed extends RelationEvents {
+  final RelationModel model;
+  RelationStoreSinglePressed({@required this.model});
+
+  @override
+  List<Object> get props => [model];
 }

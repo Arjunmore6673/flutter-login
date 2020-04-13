@@ -53,5 +53,25 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
         yield RelationLoadFailureState(error: e.toString());
       }
     }
+
+    if (event is RelationStoreSinglePressed) {
+      try {
+        yield RelationLoadingState();
+
+        yield RelationStoredState(model: event.model);
+      } catch (e) {
+        print(e);
+        yield RelationLoadFailureState(error: e.toString());
+      }
+    }
+
+    if (event is RelationGetSinglePressed) {
+      try {
+        yield RelationLoadingState();
+      } catch (e) {
+        print(e);
+        yield RelationLoadFailureState(error: e.toString());
+      }
+    }
   }
 }
