@@ -1,6 +1,31 @@
 
 # Tasks
 
+<!-- # New Features -->
+
+<!-- - Show details of realtion => DONE
+- Add relation => DONE
+- view relation profile separtely DONE
+- Contact list get and save in db relation automatically
+    - ## getting contacts  15mins started 3.19 to 3.40
+    -adding permission 15mins =>DONE
+    -extra buffer time 10mins =>DONE -->
+
+<!-- SHOWING SERCHED CONTACTS WIDGET -->
+
+# 
+-  make card 11:33 am to
+     # 1:00 pm dead line
+<!-- # - search any grid widget till 10:00 am done -->
+
+<!-- - make widget 20 mins
+- add save and remove option 15min -->
+
+
+
+
+
+
 <!-- ## - Add relation api integration 15 mins 10:40 To 10:55 -->
 <!-- 
 - view profile separately

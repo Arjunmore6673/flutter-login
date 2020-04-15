@@ -1,11 +1,15 @@
+import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutterapp/app_theme.dart';
 import 'package:flutterapp/custom_drawer/drawer_user_controller.dart';
 import 'package:flutterapp/custom_drawer/home_drawer.dart';
+import 'package:flutterapp/screens/contact_list.dart';
 import 'package:flutterapp/screens/feedback_screen.dart';
 import 'package:flutterapp/screens/help_screen.dart';
 import 'package:flutterapp/screens/home_screen.dart';
 import 'package:flutterapp/screens/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/screens/relation_screen.dart';
+import 'package:flutterapp/screens/searched_contacts.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -17,11 +21,22 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   DrawerIndex drawerIndex;
   AnimationController sliderAnimationController;
 
+  GlobalKey bottomNavigationKey = GlobalKey();
+  int currentPage = 0;
+  List<Widget> screens;
+
   @override
   void initState() {
-    drawerIndex = DrawerIndex.HOME;
-    screenView = const MyHomePage();
     super.initState();
+    screens = [
+      RelationScreen(),
+      ContactListPage(),
+      HelpScreen(),
+      FeedbackScreen(),
+      InviteFriend()
+    ];
+    drawerIndex = DrawerIndex.HOME;
+    screenView = new ContactListPage();
   }
 
   @override
@@ -42,7 +57,39 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             onDrawerCall: (DrawerIndex drawerIndexdata) {
               changeIndex(drawerIndexdata);
             },
-            screenView: screenView,
+            screenView: IndexedStack(
+              index: currentPage,
+              children: screens,
+            ),
+          ),
+          bottomNavigationBar: FancyBottomNavigation(
+            tabs: [
+              TabData(
+                iconData: Icons.home,
+                title: "Home",
+                onclick: () {
+                  final FancyBottomNavigationState fState =
+                      bottomNavigationKey.currentState;
+                  fState.setPage(0);
+                },
+              ),
+              TabData(
+                iconData: Icons.add,
+                title: "Add",
+                onclick: () {
+                  final FancyBottomNavigationState fState =
+                      bottomNavigationKey.currentState;
+                  fState.setPage(1);
+                },
+              )
+            ],
+            initialSelection: 0,
+            key: bottomNavigationKey,
+            onTabChangedListener: (position) {
+              setState(() {
+                currentPage = position;
+              });
+            },
           ),
         ),
       ),
@@ -54,23 +101,37 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       drawerIndex = drawerIndexdata;
       if (drawerIndex == DrawerIndex.HOME) {
         setState(() {
-          screenView = const MyHomePage();
+          currentPage = 0;
         });
       } else if (drawerIndex == DrawerIndex.Help) {
         setState(() {
-          screenView = HelpScreen();
+          // screenView = HelpScreen();
+          currentPage = 2;
         });
       } else if (drawerIndex == DrawerIndex.FeedBack) {
         setState(() {
-          screenView = FeedbackScreen();
+          // screenView = FeedbackScreen();
+          currentPage = 3;
         });
       } else if (drawerIndex == DrawerIndex.Invite) {
         setState(() {
-          screenView = InviteFriend();
+          // screenView = InviteFriend();
+          currentPage = 4;
         });
       } else {
         //do in your way......
       }
+    }
+  }
+
+  _getPage(int page) {
+    switch (page) {
+      case 0:
+        return ContactListPage();
+      case 1:
+        return MyHomePage();
+      default:
+        return ContactListPage();
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutterapp/screens/loading.dart';
 import 'package:flutterapp/screens/login_page.dart';
 import 'package:flutterapp/screens/navigation_home_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'blocs/auth_bloc/auth_bloc.dart';
 import 'blocs/auth_bloc/auth_event.dart';
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
                 //return ViewProfile();
                 // return RelationScreen();
                 // return ContactListPage();
+                // return NavigationHomeScreen();
                 return NavigationHomeScreen();
               }
               if (state is AuthenticationUnauthenticated) {
@@ -120,10 +122,23 @@ class MyAppNew extends StatefulWidget {
 
 class _MyAppNewState extends State<MyAppNew> {
   final UserRepository userRepository;
-  int currentPage = 0;
-
-  GlobalKey bottomNavigationKey = GlobalKey();
   _MyAppNewState({Key key, @required this.userRepository});
+
+  @override
+  void initState() {
+    super.initState();
+    _listenForPermissionStatus();
+  }
+
+  void _listenForPermissionStatus() async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      print("status is granted ");
+    } else {
+      print("request  contacts ");
+      await Permission.contacts.request();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,8 +164,9 @@ class _MyAppNewState extends State<MyAppNew> {
               // return AddRelation();
               //return ViewProfile();
               // return RelationScreen();
-              // return ContactListPage();
+              //  return ContactListPage();
               return NavigationHomeScreen();
+              // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {
               // return RelationScreen();
@@ -162,99 +178,7 @@ class _MyAppNewState extends State<MyAppNew> {
             return Text("something wrong");
           },
         ),
-        bottomNavigationBar: FancyBottomNavigation(
-          tabs: [
-         
-            TabData(
-              iconData: Icons.home,
-              title: "Home",
-              onclick: () {
-                final FancyBottomNavigationState fState =
-                    bottomNavigationKey.currentState;
-                fState.setPage(2);
-              },
-            ),
-            TabData(iconData: Icons.add, title: "Add")
-          ],
-          initialSelection: 1,
-          key: bottomNavigationKey,
-          onTabChangedListener: (position) {
-            setState(() {
-              currentPage = position;
-            });
-          },
-        ),
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[Text("Hello"), Text("World")],
-          ),
-        ),
       ),
     );
-  }
-
-  _getPage(int page) {
-    switch (page) {
-      case 0:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("This is the home page"),
-            RaisedButton(
-              child: Text(
-                "Start new page",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Theme.of(context).primaryColor,
-              onPressed: () {},
-            ),
-            RaisedButton(
-              child: Text(
-                "Change to page 3",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Theme.of(context).accentColor,
-              onPressed: () {
-                final FancyBottomNavigationState fState =
-                    bottomNavigationKey.currentState;
-                fState.setPage(2);
-              },
-            )
-          ],
-        );
-      case 1:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("This is the search page"),
-            RaisedButton(
-              child: Text(
-                "Start new page",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Theme.of(context).primaryColor, onPressed: () {},
-              // onPressed: () {
-              //   Navigator.of(context).push(
-              //       MaterialPageRoute(builder: (context) => SecondPage()));
-              // },
-            )
-          ],
-        );
-      default:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("This is the basket page"),
-            RaisedButton(
-              child: Text(
-                "Start new page",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Theme.of(context).primaryColor,
-              onPressed: () {},
-            )
-          ],
-        );
-    }
   }
 }

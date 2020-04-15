@@ -26,114 +26,61 @@ class RelationScreenState extends State<RelationScreen> {
   Widget build(BuildContext context) {
     //final relnBloc = BlocProvider.of<RelationBloc>(context);
     return Scaffold(
-        body: DefaultBottomBarController(
-      child: Page(),
-    ));
+      body: Page(),
+    );
   }
 }
 
 class Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).canvasColor,
-      body: BlocProvider(
-        create: (BuildContext context) => RelationBloc(UserRepository()),
-        child: Container(
-          child: BlocListener<RelationBloc, RelationState>(
-            /// listener to listen failure events
-            listener: (context, state) {
-              if (state is RelationLoadFailureState) {
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${state.error}'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: BlocBuilder<RelationBloc, RelationState>(
-              builder: (context, state) {
-                if (state is RelationEmptyState) {
-                  BlocProvider.of<RelationBloc>(context)
-                      .add(RelationListPressed(userId: 1));
-                  return Text("EMPTY");
-                }
-                if (state is RelationLoadingState) {
-                  return Text("Loading..");
-                }
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).canvasColor,
+        body: BlocProvider(
+          create: (BuildContext context) => RelationBloc(UserRepository()),
+          child: Container(
+            child: BlocListener<RelationBloc, RelationState>(
+              /// listener to listen failure events
+              listener: (context, state) {
                 if (state is RelationLoadFailureState) {
-                  return Text("error..");
-                }
-                if (state is RelationLoadedState) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                          flex: 1, child: getFirstBloc(state.data["user"])),
-
-                      /// state.data is map of  mama/mami,  kaka/mavshi, brother/sister
-                      Expanded(flex: 2, child: getThirdBloc(state.data)),
-                    ],
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${state.error}'),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
-                return Text("initial ");
               },
+              child: BlocBuilder<RelationBloc, RelationState>(
+                builder: (context, state) {
+                  if (state is RelationEmptyState) {
+                    BlocProvider.of<RelationBloc>(context)
+                        .add(RelationListPressed(userId: 1));
+                    return Text("EMPTY");
+                  }
+                  if (state is RelationLoadingState) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (state is RelationLoadFailureState) {
+                    return Text("error..");
+                  }
+                  if (state is RelationLoadedState) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Expanded(
+                            flex: 2, child: getFirstBloc(state.data["user"])),
+
+                        /// state.data is map of  mama/mami,  kaka/mavshi, brother/sister
+                        Expanded(flex: 3, child: getThirdBloc(state.data)),
+                      ],
+                    );
+                  }
+                  return Text("initial ");
+                },
+              ),
             ),
-          ),
-        ),
-      ),
-
-      //Set to true for bottom appbar overlap body content
-      extendBody: true,
-
-      // Lets use docked FAB for handling state of sheet
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: GestureDetector(
-        // Set onVerticalDrag event to drag handlers of controller for swipe effect
-        onVerticalDragUpdate: DefaultBottomBarController.of(context).onDrag,
-        onVerticalDragEnd: DefaultBottomBarController.of(context).onDragEnd,
-        child: FloatingActionButton.extended(
-          label: Text("Add"),
-          elevation: 2,
-          backgroundColor: Colors.deepOrange,
-          foregroundColor: Colors.white,
-          //Set onPressed event to swap state of bottom bar
-          onPressed: () => DefaultBottomBarController.of(context).swap(),
-        ),
-      ),
-
-      // Actual expandable bottom bar
-      bottomNavigationBar: BottomExpandableAppBar(
-        expandedHeight: 550,
-        horizontalMargin: 16,
-        shape: AutomaticNotchedShape(
-            RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
-        expandedBackColor: Theme.of(context).backgroundColor,
-        expandedBody: Center(
-          child: AddRelation(),
-        ),
-        bottomAppBarBody: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  "Tets",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Spacer(
-                flex: 2,
-              ),
-              Expanded(
-                child: Text(
-                  "Stet",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
           ),
         ),
       ),
@@ -172,7 +119,6 @@ class Page extends StatelessWidget {
 
     return ListView(
       children: <Widget>[
-
         ExpandableCardCommon(
           length: mamaMami.length,
           text: "MAMA / MAMI",

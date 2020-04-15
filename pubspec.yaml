@@ -29,7 +29,8 @@ dependencies:
   contacts_service: ^0.3.10
   permission_handler: ^5.0.0+hotfix.3
   fancy_bottom_navigation: ^0.3.2
-
+  flutter_staggered_animations: "^0.1.2"
+ 
 
 dev_dependencies:
   flutter_test:
