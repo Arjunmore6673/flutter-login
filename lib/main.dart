@@ -88,7 +88,8 @@ class MyApp extends StatelessWidget {
               }
               if (state is AuthenticationUnauthenticated) {
                 // return RelationScreen();
-                return LoginPage(userRepository: userRepository);
+               // return LoginPage(userRepository: userRepository);
+                return NavigationHomeScreen();
               }
               if (state is AuthenticationLoading) {
                 return LoadingIndicator();

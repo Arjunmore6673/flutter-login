@@ -19,14 +19,21 @@ class RelationListPressed extends RelationEvents {
 class RelationAddPressed extends RelationEvents {
   final String name;
   final String mobile;
+  final String email;
   final String address;
   final String relation;
+  final String avtar;
 
   RelationAddPressed(
-      {@required this.name, this.mobile, this.address, this.relation});
+      {@required this.name,
+      this.mobile,
+      this.email,
+      this.address,
+      this.relation,
+      this.avtar});
 
   @override
-  List<Object> get props => [name, mobile, address, relation];
+  List<Object> get props => [name, mobile, email, address, relation, avtar];
 }
 
 class RelationGetSinglePressed extends RelationEvents {

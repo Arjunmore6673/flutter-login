@@ -1,5 +1,10 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
+import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/common/CardCommon.dart';
 import 'package:flutterapp/screens/common/TextCommon.dart';
 
@@ -23,26 +28,55 @@ class _SearchedContactsState extends State<SearchedContacts> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: getStack(),
-            ),
-            Expanded(
-              child: getStack(),
-            ),
-          ],
+      child: BlocProvider(
+        create: (BuildContext ccc) => RelationBloc(UserRepository()),
+        child: BlocListener<RelationBloc, RelationState>(
+          /// listener to listen failure events
+          listener: (ccc, state) {
+            if (state is RelationLoadFailureState) {
+              Scaffold.of(ccc).showSnackBar(
+                SnackBar(
+                  content: Text('${state.error}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+            if (state is RelationAddedState) {
+              Scaffold.of(ccc).showSnackBar(
+                SnackBar(
+                  content: Text("Added successfully"),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          child: BlocBuilder<RelationBloc, RelationState>(
+            builder: (ccc, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: getStack(ccc),
+                      ),
+                      Expanded(
+                        child: getStack(ccc),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
         ),
-      ],
-    ));
+      ),
+    );
   }
 
-  Widget getStack() {
+  Widget getStack(BuildContext ccc) {
     return Container(
-      margin: EdgeInsets.only(top:10),
+      margin: EdgeInsets.only(top: 10),
       child: Stack(
         alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
@@ -188,8 +222,19 @@ class _SearchedContactsState extends State<SearchedContacts> {
                     color: Colors.orange,
                   ),
                   SizedBox(width: 10),
-                  Text('save',
-                      style: TextStyle(color: Colors.blue, fontSize: 18)),
+                  GestureDetector(
+                    onTap: () {
+                      BlocProvider.of<RelationBloc>(ccc).add(RelationAddPressed(
+                          name: widget.contact.displayName,
+                          mobile: widget.contact.phones.elementAt(0).value,
+                          email: '',
+                          address: "",
+                          relation: "",
+                          avtar: "widget.contact.avatar"));
+                    },
+                    child: Text('save',
+                        style: TextStyle(color: Colors.blue, fontSize: 18)),
+                  ),
                 ],
               ),
               onPressed: () {},

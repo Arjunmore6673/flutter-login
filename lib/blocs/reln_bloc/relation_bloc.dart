@@ -41,8 +41,10 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
         String result = await userRepository.add_relation(
           name: event.name,
           mobile: event.mobile,
+          email: event.email,
           address: event.address,
           relation: event.relation,
+          avtar: event.relation,
         );
         print("00-" + result);
 

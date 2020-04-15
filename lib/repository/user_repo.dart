@@ -37,8 +37,10 @@ class UserRepository {
   Future<String> add_relation({
     @required String name,
     @required String mobile,
+    @required String email,
     @required String address,
     @required String relation,
+    @required String avtar,
   }) async {
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
@@ -49,7 +51,7 @@ class UserRepository {
           "user": {
             "name": name,
             "mobile": mobile,
-            "email": 'rock1333@gmail.com',
+            "email": email,
             "city": address
           },
           "relation":"BROTHER"
