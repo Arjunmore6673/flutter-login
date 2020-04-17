@@ -5,11 +5,9 @@ import 'package:flutterapp/custom_drawer/home_drawer.dart';
 import 'package:flutterapp/screens/contact_list.dart';
 import 'package:flutterapp/screens/feedback_screen.dart';
 import 'package:flutterapp/screens/help_screen.dart';
-import 'package:flutterapp/screens/home_screen.dart';
 import 'package:flutterapp/screens/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/screens/relation_screen.dart';
-import 'package:flutterapp/screens/searched_contacts.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -23,6 +21,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
 
   GlobalKey bottomNavigationKey = GlobalKey();
   int currentPage = 0;
+
   List<Widget> screens;
 
   @override
@@ -36,7 +35,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       InviteFriend()
     ];
     drawerIndex = DrawerIndex.HOME;
-    screenView = new ContactListPage();
+    screenView = new RelationScreen();
   }
 
   @override
@@ -49,19 +48,20 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         child: Scaffold(
           backgroundColor: AppTheme.nearlyWhite,
           body: DrawerUserController(
-            screenIndex: drawerIndex,
-            drawerWidth: MediaQuery.of(context).size.width * 0.75,
-            animationController: (AnimationController animationController) {
-              sliderAnimationController = animationController;
-            },
-            onDrawerCall: (DrawerIndex drawerIndexdata) {
-              changeIndex(drawerIndexdata);
-            },
-            screenView: IndexedStack(
-              index: currentPage,
-              children: screens,
-            ),
-          ),
+              screenIndex: drawerIndex,
+              drawerWidth: MediaQuery.of(context).size.width * 0.75,
+              animationController: (AnimationController animationController) {
+                sliderAnimationController = animationController;
+              },
+              onDrawerCall: (DrawerIndex drawerIndexdata) {
+                changeIndex(drawerIndexdata);
+              },
+              screenView: currentPage != 0
+                  ? IndexedStack(
+                      index: currentPage,
+                      children: screens,
+                    )
+                  : screenView),
           bottomNavigationBar: FancyBottomNavigation(
             tabs: [
               TabData(
@@ -105,7 +105,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         });
       } else if (drawerIndex == DrawerIndex.Help) {
         setState(() {
-          // screenView = HelpScreen();
+          screenView = HelpScreen();
           currentPage = 2;
         });
       } else if (drawerIndex == DrawerIndex.FeedBack) {
@@ -127,9 +127,11 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   _getPage(int page) {
     switch (page) {
       case 0:
-        return ContactListPage();
+        screenView = RelationScreen();
+        return RelationScreen();
       case 1:
-        return MyHomePage();
+        screenView = ContactListPage();
+        return ContactListPage();
       default:
         return ContactListPage();
     }

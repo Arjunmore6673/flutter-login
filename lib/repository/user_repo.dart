@@ -11,8 +11,11 @@ class UserRepository {
   Map<String, String> headers = {
     "Content-type": "application/json",
     "Authorization":
-        "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzMCIsInVzZXJuYW1lIjoicm9ja2FqbUBnbWFpbC5jb20iLCJpZCI6IjMwIiwic3RhdHVzIjoiQUNUSVZFIn0.xAz8uKaa0kqlsvm0xtZom07eHd6a9Pp1Z8p12fxzYGvmd6l14TXnEukPDBylNxSjKsWNL4j6JKzJ6iDd2kTPQA",
+        "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
+        
   };
+
+
 
   Future<String> authenticate({
     @required String username,
@@ -20,7 +23,7 @@ class UserRepository {
   }) async {
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
-      "http://192.168.43.89:8001/auth/login",
+      "https://natigunta6673.herokuapp.com/auth/login",
       headers: headers,
       body: json.encode(
         {"username": "rockajm@gmail.com", "password": "12345"},
@@ -44,17 +47,17 @@ class UserRepository {
   }) async {
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
-      "http://192.168.43.89:8001/api/secured/add_relation_user",
+      "https://natigunta6673.herokuapp.com/api/secured/add_relation_user",
       headers: headers,
       body: json.encode(
         {
           "user": {
             "name": name,
             "mobile": mobile,
-            "email": email,
+            "email": '2121@gmail.com',
             "city": address
           },
-          "relation":"BROTHER"
+          "relation": "BROTHER"
         },
       ),
     );
@@ -68,7 +71,7 @@ class UserRepository {
   /// get relation list of user
   Future<Map<String, Object>> getRelationList({@required int userId}) async {
     Response response = await http.get(
-      "http://192.168.43.89:8001/api/secured/get_nested",
+      "https://natigunta6673.herokuapp.com/api/secured/get_nested",
       headers: headers,
     );
     final res = json.decode(response.body);

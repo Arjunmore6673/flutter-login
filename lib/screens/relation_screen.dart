@@ -24,9 +24,13 @@ class RelationScreenState extends State<RelationScreen> {
       "https://lh3.googleusercontent.com/proxy/icdlNc79c98KgJ3xsNW6kaMOqfJwMD13268O9PtXdadc8mYDyby9ai_Pb_h7Yp0LQDNsFcgMc-_2TS-msAtLZ-kGxsz_8hJ5gPF4ikP0cyrxO8PLC63tH2f-0sKVLUFzjd5Ld_dWkh9Z8wjcLtyICgBLjSeroYhZe8UXc4_i_WbCtnJn";
   @override
   Widget build(BuildContext context) {
-    //final relnBloc = BlocProvider.of<RelationBloc>(context);
     return Scaffold(
-      body: Page(),
+      body: BlocProvider(
+        create: (BuildContext context) => RelationBloc(
+          UserRepository(),
+        ),
+        child: Page(),
+      ),
     );
   }
 }
@@ -34,52 +38,50 @@ class RelationScreenState extends State<RelationScreen> {
 class Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // BlocProvider.of<RelationBloc>(context).add(RelationListPressed(userId: 1));
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).canvasColor,
-        body: BlocProvider(
-          create: (BuildContext context) => RelationBloc(UserRepository()),
-          child: Container(
-            child: BlocListener<RelationBloc, RelationState>(
-              /// listener to listen failure events
-              listener: (context, state) {
+        body: Container(
+          child: BlocListener<RelationBloc, RelationState>(
+            /// listener to listen failure events
+            listener: (context, state) {
+              if (state is RelationLoadFailureState) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${state.error}'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: BlocBuilder<RelationBloc, RelationState>(
+              builder: (context, state) {
+                if (state is RelationEmptyState) {
+                  BlocProvider.of<RelationBloc>(context)
+                      .add(RelationListPressed(userId: 1));
+                  return Text("EMPTY");
+                }
+                if (state is RelationLoadingState) {
+                  return Center(child: CircularProgressIndicator());
+                }
                 if (state is RelationLoadFailureState) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${state.error}'),
-                      backgroundColor: Colors.red,
-                    ),
+                  return Text("error..");
+                }
+                if (state is RelationLoadedState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                          flex: 2, child: getFirstBloc(state.data["user"])),
+
+                      /// state.data is map of  mama/mami,  kaka/mavshi, brother/sister
+                      Expanded(flex: 3, child: getThirdBloc(state.data)),
+                    ],
                   );
                 }
+                return Text("initial ");
               },
-              child: BlocBuilder<RelationBloc, RelationState>(
-                builder: (context, state) {
-                  if (state is RelationEmptyState) {
-                    BlocProvider.of<RelationBloc>(context)
-                        .add(RelationListPressed(userId: 1));
-                    return Text("EMPTY");
-                  }
-                  if (state is RelationLoadingState) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (state is RelationLoadFailureState) {
-                    return Text("error..");
-                  }
-                  if (state is RelationLoadedState) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(
-                            flex: 2, child: getFirstBloc(state.data["user"])),
-
-                        /// state.data is map of  mama/mami,  kaka/mavshi, brother/sister
-                        Expanded(flex: 3, child: getThirdBloc(state.data)),
-                      ],
-                    );
-                  }
-                  return Text("initial ");
-                },
-              ),
             ),
           ),
         ),
