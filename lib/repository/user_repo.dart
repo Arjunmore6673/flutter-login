@@ -1,4 +1,6 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutterapp/util/constants.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:http/http.dart';
@@ -12,10 +14,7 @@ class UserRepository {
     "Content-type": "application/json",
     "Authorization":
         "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
-        
   };
-
-
 
   Future<String> authenticate({
     @required String username,
@@ -154,5 +153,57 @@ class UserRepository {
       prefs.getString(Constants.USER_RELATION),
       prefs.getString(Constants.USER_IMAGE),
     );
+  }
+
+  getContactList() async {
+    if (await Permission.contacts.isGranted) {
+      print("granted");
+      List<Contact> contactsAll =
+          (await ContactsService.getContacts(withThumbnails: false)).toList();
+      var cc = contactsAll
+          .where(
+            (i) =>
+                regularExpression(i.displayName, 'mami') ||
+                regularExpression(i.displayName, 'kaka') ||
+                regularExpression(i.displayName, 'mavshi') ||
+                regularExpression(i.displayName, 'mama') ||
+                regularExpression(i.displayName, 'sister') ||
+                regularExpression(i.displayName, 'bro') ||
+                regularExpression(i.displayName, 'brother') ||
+                regularExpression(i.displayName, 'siso') ||
+                regularExpression(i.displayName, 'didi'),
+          )
+          .toList();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> listDeleted = prefs.getStringList("DELETED");
+      if (listDeleted == null) {
+        listDeleted = [];
+      }
+      var filterredList =
+          cc.where((test) => !listDeleted.contains(test.displayName)).toList();
+      return filterredList;
+    } else {
+      print("he dont have persmission");
+    }
+  }
+
+  bool regularExpression(String stringg, String search) {
+    RegExp exp = new RegExp(
+      "\\b" + search + "\\b",
+      caseSensitive: false,
+    );
+    return exp.hasMatch(stringg);
+  }
+
+  getContactListAvtar(contactList) async {
+    List<Contact> contactWithAvtar = [];
+    // Lazy load thumbnails after rendering initial contacts.
+    for (final contact in contactList) {
+      ContactsService.getAvatar(contact).then((avatar) {
+        contact.avatar = avatar;
+        contactWithAvtar.add(contact);
+      });
+    }
+    return contactWithAvtar;
   }
 }

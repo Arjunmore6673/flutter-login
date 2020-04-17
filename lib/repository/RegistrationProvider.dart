@@ -14,7 +14,7 @@ class RegistrationProvider {
   Future<int> saveRegistration(RegistrationModel model) async {
     print("api called");
     return http
-        .post("http://192.168.43.89:8001/auth/register",
+        .post("https://natigunta6673.herokuapp.com/auth/register",
             headers: headers, body: json.encode(model.toMap()))
         .then((http.Response response) {
       final int statusCode = response.statusCode;

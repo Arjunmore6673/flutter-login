@@ -7,6 +7,7 @@ import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/loading.dart';
 import 'package:flutterapp/screens/login_page.dart';
 import 'package:flutterapp/screens/navigation_home_screen.dart';
+import 'package:flutterapp/screens/register_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -84,11 +85,11 @@ class MyApp extends StatelessWidget {
                 // return RelationScreen();
                 // return ContactListPage();
                 // return NavigationHomeScreen();
-                return NavigationHomeScreen();
+                return RegisterScreen();
               }
               if (state is AuthenticationUnauthenticated) {
                 // return RelationScreen();
-               // return LoginPage(userRepository: userRepository);
+                // return LoginPage(userRepository: userRepository);
                 return NavigationHomeScreen();
               }
               if (state is AuthenticationLoading) {
@@ -164,9 +165,9 @@ class _MyAppNewState extends State<MyAppNew> {
             if (state is AuthenticationAuthenticated) {
               // return AddRelation();
               //return ViewProfile();
-              // return RelationScreen();
+              return RegisterScreen();
               //  return ContactListPage();
-              return NavigationHomeScreen();
+              // return NavigationHomeScreen();
               // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {
