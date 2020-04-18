@@ -8,6 +8,7 @@ import 'package:flutterapp/screens/loading.dart';
 import 'package:flutterapp/screens/login_page.dart';
 import 'package:flutterapp/screens/navigation_home_screen.dart';
 import 'package:flutterapp/screens/register_screen.dart';
+import 'package:flutterapp/screens/relation_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -165,13 +166,15 @@ class _MyAppNewState extends State<MyAppNew> {
             if (state is AuthenticationAuthenticated) {
               // return AddRelation();
               //return ViewProfile();
-              return RegisterScreen();
+              //  return RegisterScreen();
               //  return ContactListPage();
-              // return NavigationHomeScreen();
+              //return RelationScreen();
+               //return LoginPage(userRepository: userRepository);
+             return NavigationHomeScreen();
               // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {
-              // return RelationScreen();
+              //  return RegisterScreen();
               return LoginPage(userRepository: userRepository);
             }
             if (state is AuthenticationLoading) {

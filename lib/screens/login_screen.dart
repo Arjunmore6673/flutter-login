@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_event.dart';
 import 'package:flutterapp/blocs/bloc_login/login_state.dart';
+import 'package:flutterapp/screens/common/navigator.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -128,7 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Registration',
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Nevigator.navigateRegisterPage(context);
+                            },
                             color: Colors.deepPurple,
                           ),
                         ),
@@ -143,7 +146,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 
 // //                new Container(
 // //                  width: screenSize.width,

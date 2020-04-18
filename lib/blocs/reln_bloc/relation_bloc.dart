@@ -38,7 +38,7 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
       try {
         yield RelationLoadingState();
 
-        String result = await userRepository.add_relation(
+        String result = await userRepository.addRelation(
           name: event.name,
           mobile: event.mobile,
           email: event.email,

@@ -16,7 +16,7 @@ class CenterInkText extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Ink free',
-            fontSize: 33,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),

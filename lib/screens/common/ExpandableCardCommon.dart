@@ -22,7 +22,7 @@ class ExpandableCardCommon extends StatelessWidget {
           trailing: SizedBox(),
           children: <Widget>[
             Container(
-              height: length > 0 ? 250 : 20,
+              height: length > 0 ? 220 : 20,
               child: length > 0 ? child : Text("No data Present"),
             )
           ],

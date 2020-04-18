@@ -15,7 +15,7 @@ class CardCommon extends StatelessWidget {
         elevation: elevation,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
         // shape: RoundedRectangleBorder(
         //   borderRadius: BorderRadius.only(
         //       topRight: Radius.circular(40.0),

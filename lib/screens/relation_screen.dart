@@ -1,4 +1,3 @@
-import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
@@ -6,7 +5,6 @@ import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
-import 'package:flutterapp/screens/add_relation_screen.dart';
 import 'package:flutterapp/screens/view_profile.dart';
 
 import 'common/ExpandableCardCommon.dart';
@@ -38,7 +36,6 @@ class RelationScreenState extends State<RelationScreen> {
 class Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // BlocProvider.of<RelationBloc>(context).add(RelationListPressed(userId: 1));
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).canvasColor,

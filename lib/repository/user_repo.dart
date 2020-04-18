@@ -12,8 +12,7 @@ import 'dart:convert';
 class UserRepository {
   Map<String, String> headers = {
     "Content-type": "application/json",
-    "Authorization":
-        "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
+    "Authorization": "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
   };
 
   Future<String> authenticate({
@@ -36,7 +35,7 @@ class UserRepository {
     return token;
   }
 
-  Future<String> add_relation({
+  Future<String> addRelation({
     @required String name,
     @required String mobile,
     @required String email,
@@ -53,7 +52,7 @@ class UserRepository {
           "user": {
             "name": name,
             "mobile": mobile,
-            "email": '2121@gmail.com',
+            "email": '',
             "city": address
           },
           "relation": "BROTHER"
@@ -74,6 +73,7 @@ class UserRepository {
       headers: headers,
     );
     final res = json.decode(response.body);
+    print(res);
     final data = res["data"] as List;
     List<RelationModel> model =
         data.map((m) => RelationModel.fromJson2(m)).toList();
@@ -81,6 +81,7 @@ class UserRepository {
   }
 
   Future<Map<String, Object>> getFiteredList(List<RelationModel> model) async {
+    print(model.length.toString() + "__");
     Map<String, Object> map = new Map();
     List<RelationModel> mamaMami = [];
     List<RelationModel> kakaMavshi = [];
@@ -109,8 +110,8 @@ class UserRepository {
   }
 
   Future<void> deleteToken() async {
-    /// delete from keystore/keychain
-    await Future.delayed(Duration(seconds: 1));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     return;
   }
 

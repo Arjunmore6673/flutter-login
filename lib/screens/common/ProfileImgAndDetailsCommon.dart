@@ -23,13 +23,15 @@ class ProfileImgAndDetails extends StatelessWidget {
               : userModel.image),
           CardCommon(
             child: UserDeatils(mainTitle: userModel.name, widgets: [
-              Text(
-                userModel.email,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                ),
-              ),
+              userModel.email.length > 0
+                  ? Text(
+                      userModel.email,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                    )
+                  : SizedBox(),
               Text(
                 userModel.mobile,
                 style: TextStyle(

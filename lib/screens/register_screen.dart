@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/blocs/registration_bloc.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
 import 'package:flutterapp/repository/user_repo.dart';
-import 'package:flutterapp/screens/feedback_screen.dart';
 import 'package:flutterapp/screens/login_page.dart';
-import 'package:flutterapp/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -29,30 +27,39 @@ class RegisterScreenState extends State<RegisterScreen> {
         builder: (context, AsyncSnapshot<int> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data == 200) {
-              return LoginPage(userRepository: UserRepository(),);
+              return LoginPage(
+                userRepository: UserRepository(),
+              );
             } else {
               return Text("som  ething fuckied ");
             }
           }
-          return Container(
-            child: Card(
-                child: Padding(
-              child: Form(
-                key: formKey, // you missed out on this!!!
-                child: Column(
-                  children: <Widget>[
-                    name(),
-                    emailField(),
-                    passwordField(),
-                    passwordField2(),
-                    village(),
-                    mobile(),
-                    raisedButton(),
-                  ],
+          return Scaffold(
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Form(
+                  key: formKey, // you missed out on this!!!
+                  child: Card(
+                    margin: EdgeInsets.all(20),
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        children: <Widget>[
+                          name(),
+                          emailField(),
+                          passwordField(),
+                          passwordField2(),
+                          village(),
+                          mobile(),
+                          raisedButton(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              padding: EdgeInsets.all(20),
-            )),
+              ],
+            ),
           );
         });
   }
@@ -108,6 +115,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         },
         keyboardType: TextInputType.visiblePassword);
   }
+
   Widget passwordField2() {
     return TextFormField(
         controller: _passwordController2,

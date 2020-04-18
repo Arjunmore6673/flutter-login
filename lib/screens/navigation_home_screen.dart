@@ -124,16 +124,16 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     }
   }
 
-  _getPage(int page) {
-    switch (page) {
-      case 0:
-        screenView = RelationScreen();
-        return RelationScreen();
-      case 1:
-        screenView = ContactListPage();
-        return ContactListPage();
-      default:
-        return ContactListPage();
-    }
-  }
+  // _getPage(int page) {
+  //   switch (page) {
+  //     case 0:
+  //       screenView = RelationScreen();
+  //       return RelationScreen();
+  //     case 1:
+  //       screenView = ContactListPage();
+  //       return ContactListPage();
+  //     default:
+  //       return ContactListPage();
+  //   }
+  // }
 }

@@ -9,7 +9,6 @@ import 'package:flutterapp/blocs/contact_bloc/contact_state.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/loading.dart';
 import 'package:flutterapp/screens/searched_contacts.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ContactListPage extends StatefulWidget {
