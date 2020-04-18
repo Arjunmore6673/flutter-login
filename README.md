@@ -22,21 +22,19 @@ save relation and village with validation.
 
 get list again after save 20mins done.
 
-move all logic to repository of contact list. 30mins 3.33 
+move all logic to repository of contact list. 30mins 3.33
 
 linkedin 9 45 done.
-fix api issue 20min 8:15
-done
+fix api issue 20min 8:15 done
 linkedin 12 done
-
-
- show his relation after clicking on profile of relative. 20 mins 12 :50 + 20 ! 1:45  // done
-
-# add Registratino form at start. fix 
-
-
+show his relation after clicking on profile of relative. 20 mins 12 :50 + 20 ! 1:45 // done
+add Registratino form at start. fix done
 20min done issue with api need to fix . done.
 
+relation must come with object. 3:00
+
+separeate class needed
+logic to put relation on that
 
 feedback taking. 1 hour.
 fix placeholder image. 15 mins.

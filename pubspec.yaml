@@ -30,7 +30,7 @@ dependencies:
   permission_handler: ^5.0.0+hotfix.3
   fancy_bottom_navigation: ^0.3.2
   flutter_staggered_animations: "^0.1.2"
- 
+  dio: ^3.0.9 
 
 dev_dependencies:
   flutter_test:

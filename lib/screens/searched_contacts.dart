@@ -22,6 +22,7 @@ class SearchedContacts extends StatefulWidget {
 
 class _SearchedContactsState extends State<SearchedContacts> {
   List<bool> isSelected;
+
   @override
   void initState() {
     super.initState();
@@ -62,15 +63,13 @@ class _SearchedContactsState extends State<SearchedContacts> {
               );
             }
             if (state is RelationAddedState) {
-              Scaffold.of(ccc).showSnackBar(
+              widget.onDelete();
+               Scaffold.of(ccc).showSnackBar(
                 SnackBar(
                   content: Text("Added successfully"),
                   backgroundColor: Colors.red,
                 ),
               );
-              widget.onDelete();
-              BlocProvider.of<RelationBloc>(ccc)
-                  .add(RelationListPressed(userId: 1));
             }
           },
           child: BlocBuilder<RelationBloc, RelationState>(
@@ -290,34 +289,30 @@ class _SearchedContactsState extends State<SearchedContacts> {
                   color: Colors.orange,
                 ),
                 SizedBox(width: 5),
-                GestureDetector(
-                  onTap: () {
-                    print("ontap frjkldjfk j");
-                    if (villageCityTextBox.text.length > 0) {
-                      BlocProvider.of<RelationBloc>(ccc).add(RelationAddPressed(
-                          name: widget.contact.displayName,
-                          mobile: widget.contact.phones.elementAt(0).value,
-                          email: '',
-                          address: villageCityTextBox.text,
-                          relation: getSelectedRelation(),
-                          avtar: "widget.contact.avatar"));
-                    } else {
-                      print("else");
-                      Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text("Please Enter village and Select relation"),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                  child: Text('save',
-                      style: TextStyle(color: Colors.blue, fontSize: 18)),
-                ),
+                Text('save',
+                    style: TextStyle(color: Colors.blue, fontSize: 18)),
               ],
             ),
-            onPressed: () {},
+            onPressed: () {
+              print("ontap frjkldjfk j");
+              if (villageCityTextBox.text.length > 0) {
+                BlocProvider.of<RelationBloc>(ccc).add(RelationAddPressed(
+                    name: widget.contact.displayName,
+                    mobile: widget.contact.phones.elementAt(0).value,
+                    email: '',
+                    address: villageCityTextBox.text,
+                    relation: getSelectedRelation(),
+                    avtar: "widget.contact.avatar"));
+              } else {
+                print("else");
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Please Enter village and Select relation"),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
           ),
         ),
       ],

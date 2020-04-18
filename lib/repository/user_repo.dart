@@ -12,7 +12,8 @@ import 'dart:convert';
 class UserRepository {
   Map<String, String> headers = {
     "Content-type": "application/json",
-    "Authorization": "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
+    "Authorization":
+        "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
   };
 
   Future<String> authenticate({
@@ -43,6 +44,14 @@ class UserRepository {
     @required String relation,
     @required String avtar,
   }) async {
+    /// token
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(Constants.TOKEN);
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Token " + token
+    };
+
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
       "https://natigunta6673.herokuapp.com/api/secured/add_relation_user",
@@ -68,6 +77,14 @@ class UserRepository {
 
   /// get relation list of user
   Future<Map<String, Object>> getRelationList({@required int userId}) async {
+    /// token
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(Constants.TOKEN);
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Token " + token
+    };
+
     Response response = await http.get(
       "https://natigunta6673.herokuapp.com/api/secured/get_nested",
       headers: headers,
