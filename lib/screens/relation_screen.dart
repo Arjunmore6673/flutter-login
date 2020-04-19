@@ -56,7 +56,7 @@ class Page extends StatelessWidget {
               builder: (context, state) {
                 if (state is RelationEmptyState) {
                   BlocProvider.of<RelationBloc>(context)
-                      .add(RelationListPressed(userId: 1));
+                      .add(RelationListPressed(userId: -1));
                   return Text("EMPTY");
                 }
                 if (state is RelationLoadingState) {

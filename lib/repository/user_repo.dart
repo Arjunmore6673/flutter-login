@@ -10,6 +10,9 @@ import 'dart:async';
 import 'dart:convert';
 
 class UserRepository {
+ final baseUrl = "https://natigunta6673.herokuapp.com";//
+ //  final baseUrl = "http://192.168.43.89:8001";
+
   Map<String, String> headers = {
     "Content-type": "application/json",
     "Authorization":
@@ -22,11 +25,9 @@ class UserRepository {
   }) async {
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
-      "https://natigunta6673.herokuapp.com/auth/login",
+      baseUrl + "/auth/login",
       headers: headers,
-      body: json.encode(
-        {"username": "rockajm@gmail.com", "password": "12345"},
-      ),
+      body: json.encode({"username": "rockajm@gmail.com", "password": "12345"}),
     );
     final res = json.decode(response.body);
     final userData = res["user"];
@@ -52,15 +53,20 @@ class UserRepository {
       "Authorization": "Token " + token
     };
 
+    String output = mobile.replaceAll(' ', '');
+    String outputRemovedDash = output.replaceAll('-', '');
+    var mobileFinal =
+        outputRemovedDash.substring(outputRemovedDash.length - 10);
+
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
-      "https://natigunta6673.herokuapp.com/api/secured/add_relation_user",
+      baseUrl + "/api/secured/add_relation_user",
       headers: headers,
       body: json.encode(
         {
           "user": {
             "name": name,
-            "mobile": mobile,
+            "mobile": mobileFinal,
             "email": '',
             "city": address
           },
@@ -77,7 +83,8 @@ class UserRepository {
 
   /// get relation list of user
   Future<Map<String, Object>> getRelationList({@required int userId}) async {
-    /// token
+    String url = baseUrl +
+        "/api/secured/get_nested${userId == -1 ? '' : "?userId=${userId.toString()}"}";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.TOKEN);
     Map<String, String> headers = {
@@ -85,10 +92,7 @@ class UserRepository {
       "Authorization": "Token " + token
     };
 
-    Response response = await http.get(
-      "https://natigunta6673.herokuapp.com/api/secured/get_nested",
-      headers: headers,
-    );
+    Response response = await http.get(url, headers: headers);
     final res = json.decode(response.body);
     print(res);
     final data = res["data"] as List;

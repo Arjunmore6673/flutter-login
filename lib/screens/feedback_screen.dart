@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutterapp/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/util/constants.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedbackScreen extends StatefulWidget {
   @override
@@ -10,6 +16,36 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  final baseUrl = "https://natigunta6673.herokuapp.com";
+  final feedbackController = TextEditingController();
+
+  submitFeedback({
+    @required String message,
+  }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(Constants.TOKEN);
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Token " + token
+    };
+    Response response = await http.post(
+      baseUrl + "/api/secured/add_feedback",
+      headers: headers,
+      body: json.encode({"message": message}),
+    );
+    final res = json.decode(response.body);
+    final userData = res["data"];
+    if (userData == "feedback taken successfully") {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text("Feedback taken"),
+                content: Text("Thank you for your Feedback"),
+              ));
+    }
+    print(userData);
   }
 
   @override
@@ -75,6 +111,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           child: InkWell(
                             onTap: () {
                               FocusScope.of(context).requestFocus(FocusNode());
+                              submitFeedback(message: feedbackController.text);
                             },
                             child: Center(
                               child: Padding(
@@ -127,13 +164,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   const EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
               child: TextField(
                 maxLines: null,
-                onChanged: (String txt) {},
                 style: TextStyle(
                   fontFamily: AppTheme.fontName,
                   fontSize: 16,
                   color: AppTheme.dark_grey,
                 ),
                 cursorColor: Colors.blue,
+                controller: feedbackController,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Enter your feedback...'),

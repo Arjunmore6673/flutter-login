@@ -19,7 +19,7 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
 
         /// getting relation list
         Map<String, Object> model =
-            await userRepository.getRelationList(userId: 1);
+            await userRepository.getRelationList(userId: event.userId);
 
         /// getting relation list
         RelationModel user = await userRepository.getUserDetails();

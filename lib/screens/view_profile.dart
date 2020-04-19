@@ -11,15 +11,17 @@ import 'package:flutterapp/screens/common/ProfileImgAndDetailsCommon.dart';
 
 class ViewProfile extends StatelessWidget {
   final RelationModel model;
+
   ViewProfile({@required this.model});
 
   @override
   Widget build(BuildContext context) {
+    print(model.toString() + ")____(");
     return Scaffold(
       body: BlocProvider(
         create: (BuildContext context) => RelationBloc(
           UserRepository(),
-        )..add(RelationListPressed(userId: 1)),
+        )..add(RelationListPressed(userId: model.id)),
         child: getProfileWidget(),
       ),
     );
