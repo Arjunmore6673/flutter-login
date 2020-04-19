@@ -6,6 +6,7 @@ import 'package:flutterapp/repository/user_repo.dart';
 
 class RelationBloc extends Bloc<RelationEvents, RelationState> {
   UserRepository userRepository;
+
   RelationBloc(this.userRepository);
 
   @override
@@ -42,6 +43,7 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
           name: event.name,
           mobile: event.mobile,
           email: event.email,
+          gender: event.gender,
           address: event.address,
           relation: event.relation,
           avtar: event.relation,

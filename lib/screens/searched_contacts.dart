@@ -302,10 +302,11 @@ class _SearchedContactsState extends State<SearchedContacts> {
                     mobile: widget.contact.phones.elementAt(0).value,
                     email: '',
                     address: villageCityTextBox.text,
+                    gender: widget.contact.jobTitle,
                     relation: !listTest.contains(widget.contact.familyName)
                         ? widget.contact.familyName
                         : getSelectedRelation() + widget.contact.familyName,
-                    avtar: "widget.contact.avatar"));
+                    avtar: ""));
               } else {
                 print("else");
                 Scaffold.of(context).showSnackBar(

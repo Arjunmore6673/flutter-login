@@ -20,6 +20,7 @@ class RelationAddPressed extends RelationEvents {
   final String name;
   final String mobile;
   final String email;
+  final String gender;
   final String address;
   final String relation;
   final String avtar;
@@ -28,16 +29,19 @@ class RelationAddPressed extends RelationEvents {
       {@required this.name,
       this.mobile,
       this.email,
+      this.gender,
       this.address,
       this.relation,
       this.avtar});
 
   @override
-  List<Object> get props => [name, mobile, email, address, relation, avtar];
+  List<Object> get props =>
+      [name, mobile, email, gender, address, relation, avtar];
 }
 
 class RelationGetSinglePressed extends RelationEvents {
   final int id;
+
   RelationGetSinglePressed({@required this.id});
 
   @override
@@ -46,6 +50,7 @@ class RelationGetSinglePressed extends RelationEvents {
 
 class RelationStoreSinglePressed extends RelationEvents {
   final RelationModel model;
+
   RelationStoreSinglePressed({@required this.model});
 
   @override

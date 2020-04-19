@@ -3,6 +3,7 @@ import 'package:flutterapp/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutterapp/blocs/auth_bloc/auth_event.dart';
+import 'package:flutterapp/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeDrawer extends StatefulWidget {
@@ -23,19 +24,20 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList> drawerList;
-  String image;
+  String name="";
+  String image="";
 
   @override
   void initState() {
     setdDrawerListArray();
     super.initState();
-    getImageUrl();
+    getNameImageUrl();
   }
 
-
-  getImageUrl() async {
+  getNameImageUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     image = prefs.getString("userImage");
+    name = prefs.getString(Constants.USER_NAME);
   }
 
   void setdDrawerListArray() {
@@ -91,51 +93,56 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  AnimatedBuilder(
-                    animation: widget.iconAnimationController,
-                    builder: (BuildContext context, Widget child) {
-                      return ScaleTransition(
-                        scale: AlwaysStoppedAnimation<double>(
-                            1.0 - (widget.iconAnimationController.value) * 0.2),
-                        child: RotationTransition(
-                          turns: AlwaysStoppedAnimation<double>(Tween<double>(
-                                      begin: 0.0, end: 24.0)
-                                  .animate(CurvedAnimation(
-                                      parent: widget.iconAnimationController,
-                                      curve: Curves.fastOutSlowIn))
-                                  .value /
-                              360),
-                          child: Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: AppTheme.grey.withOpacity(0.6),
-                                    offset: const Offset(2.0, 4.0),
-                                    blurRadius: 8),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.network(
-                                  'https://qph.fs.quoracdn.net/main-qimg-d69406383d8106d2b9f257594aaeefb6'),
+                  Center(
+                    child: AnimatedBuilder(
+                      animation: widget.iconAnimationController,
+                      builder: (BuildContext context, Widget child) {
+                        return ScaleTransition(
+                          scale: AlwaysStoppedAnimation<double>(1.0 -
+                              (widget.iconAnimationController.value) * 0.2),
+                          child: RotationTransition(
+                            turns: AlwaysStoppedAnimation<double>(Tween<double>(
+                                        begin: 0.0, end: 24.0)
+                                    .animate(CurvedAnimation(
+                                        parent: widget.iconAnimationController,
+                                        curve: Curves.fastOutSlowIn))
+                                    .value /
+                                360),
+                            child: Container(
+                              height: 120,
+                              width: 120,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: AppTheme.grey.withOpacity(0.6),
+                                      offset: const Offset(2.0, 4.0),
+                                      blurRadius: 8),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(60.0)),
+                                child: Image.network(
+                                    'https://qph.fs.quoracdn.net/main-qimg-d69406383d8106d2b9f257594aaeefb6'),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 4),
-                    child: Text(
-                      'Chris Hemsworth',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.grey,
-                        fontSize: 18,
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 8, left: 4),
+                      child: Text(
+                        name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.grey,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),

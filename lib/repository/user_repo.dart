@@ -10,8 +10,8 @@ import 'dart:async';
 import 'dart:convert';
 
 class UserRepository {
- final baseUrl = "https://natigunta6673.herokuapp.com";//
- //  final baseUrl = "http://192.168.43.89:8001";
+  final baseUrl = "https://natigunta6673.herokuapp.com"; //
+  //  final baseUrl = "http://192.168.43.89:8001";
 
   Map<String, String> headers = {
     "Content-type": "application/json",
@@ -41,6 +41,7 @@ class UserRepository {
     @required String name,
     @required String mobile,
     @required String email,
+    @required String gender,
     @required String address,
     @required String relation,
     @required String avtar,
@@ -67,6 +68,7 @@ class UserRepository {
           "user": {
             "name": name,
             "mobile": mobileFinal,
+            "gender": gender,
             "email": '',
             "city": address
           },
@@ -164,6 +166,7 @@ class UserRepository {
     await prefs.setString(Constants.USER_NAME, da.getName);
     await prefs.setString(Constants.USER_MOBILE, da.getMobile);
     await prefs.setString(Constants.USER_EMAIL, da.getEmail);
+    await prefs.setString(Constants.USER_GENDER, da.gender);
     await prefs.setString(Constants.USER_RELATION, da.getRelation);
     await prefs.setString(Constants.USER_IMAGE, da.getImage);
   }
@@ -175,6 +178,7 @@ class UserRepository {
       prefs.getString(Constants.USER_MOBILE),
       prefs.getString(Constants.USER_NAME),
       prefs.getString(Constants.USER_EMAIL),
+      prefs.getString(Constants.USER_GENDER),
       prefs.getString(Constants.USER_RELATION),
       prefs.getString(Constants.USER_IMAGE),
     );

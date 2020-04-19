@@ -30,16 +30,12 @@ linkedin 12 done
 show his relation after clicking on profile of relative. 20 mins 12 :50 + 20 ! 1:45 // done
 add Registratino form at start. fix done
 20min done issue with api need to fix . done.
-
-relation must come with object. 3:00
-
-separeate class needed
-logic to put relation on that
-
-feedback taking. 1 hour.
-fix placeholder image. 15 mins.
-fix token issue dyamic. 20 mins.
-
+relation must come with object. 7:00 done
+change navigation photo 10mins til 9 25 done
+reRender fix 20mins 9:50 10.30 done
+fix placeholder image. 15 mins. done
+fix token issue dyamic. 20 mins. done
 Problems fix needed
-relation must come with object.
-profile picture.
+relation must come with object. done
+profile picture. done
+- # feedback taking. 1 hour. start at 3:15 end at 4:15

@@ -35,9 +35,13 @@ class ViewProfile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CircleAvatarCommon(model.image == null
-                  ? 'https://thehuboncanal.org/wp-content/uploads/2016/11/FEMALE-PERSON-PLACEHOLDER.jpg'
-                  : model.image),
+              (model.image == null)
+                  ? CircleAvatarCommon(
+                      assetImage: true,
+                      url: (model.gender == 'MALE'
+                          ? 'assets/men.jpg'
+                          : 'assets/women.jpg'))
+                  : CircleAvatarCommon(url: model.image),
               SizedBox(height: 30),
               TextView(text: "${model.name}", fontFamily: 'Mali', fontSize: 30),
               SizedBox(height: 10),

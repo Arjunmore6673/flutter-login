@@ -5,12 +5,13 @@ import 'package:flutterapp/screens/searched_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ContactListPage extends StatefulWidget  {
+class ContactListPage extends StatefulWidget {
   @override
   _ContactListPageState createState() => _ContactListPageState();
 }
 
-class _ContactListPageState extends State<ContactListPage> with AutomaticKeepAliveClientMixin{
+class _ContactListPageState extends State<ContactListPage>
+    with AutomaticKeepAliveClientMixin {
   List<Contact> _contacts;
   List<Contact> contactsAll;
   List<Contact> deleted;
@@ -61,31 +62,39 @@ class _ContactListPageState extends State<ContactListPage> with AutomaticKeepAli
       var contactsRelatives =
           contactsAll.where((i) => regex.hasMatch(i.displayName)).toList();
 
-      List<Contact> contactsRelativesAddedRelatives=[];
+      List<Contact> contactsRelativesAddedRelatives = [];
       for (var i = 0; i < contactsRelatives.length; i++) {
         Contact obj = contactsRelatives[i];
         if (regularExpression(obj.displayName, "mami")) {
           obj.familyName = "MAMI";
+          obj.jobTitle = "FEMALE";
         } else if (regularExpression(obj.displayName, "MAMA")) {
           obj.familyName = "MAMA";
+          obj.jobTitle = "MALE";
         } else if (regularExpression(obj.displayName, "KAKA")) {
           obj.familyName = "KAKA";
+          obj.jobTitle = "MALE";
         } else if (regularExpression(obj.displayName, "SISTER") ||
             regularExpression(obj.displayName, 'tai') ||
             regularExpression(obj.displayName, 'siso') ||
             regularExpression(obj.displayName, 'didi')) {
           obj.familyName = "SISTER";
+          obj.jobTitle = "FEMALE";
         } else if (regularExpression(obj.displayName, "bro") ||
             regularExpression(obj.displayName, 'brother') ||
             regularExpression(obj.displayName, 'bhaiya') ||
             regularExpression(obj.displayName, 'dada')) {
           obj.familyName = "BROTHER";
+          obj.jobTitle = "MALE";
         } else if (regularExpression(obj.displayName, "aatya")) {
           obj.familyName = "AATYA";
+          obj.jobTitle = "FEMALE";
         } else if (regularExpression(obj.displayName, "daji")) {
           obj.familyName = "DAJI";
+          obj.jobTitle = "MALE";
         } else if (regularExpression(obj.displayName, "mavshi")) {
           obj.familyName = "MAVSHI";
+          obj.jobTitle = "FEMALE";
         }
         contactsRelativesAddedRelatives.add(obj);
       }

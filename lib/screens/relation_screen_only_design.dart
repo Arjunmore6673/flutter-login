@@ -21,7 +21,7 @@ class RelationScreenState extends State<RelationScreen> {
           flex: 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[CircleAvatarCommon(i), personDetails()],
+            children: <Widget>[CircleAvatarCommon(url: i), personDetails()],
           ),
         ),
         Expanded(
@@ -47,6 +47,4 @@ class RelationScreenState extends State<RelationScreen> {
   Widget personDetails() {
     return Text("fudddd");
   }
-
-  
 }
