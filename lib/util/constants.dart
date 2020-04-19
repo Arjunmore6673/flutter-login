@@ -7,4 +7,7 @@ class Constants {
   static const String USER_RELATION = 'USER_RELATION';
   static const String USER_IMAGE = 'USER_IMAGE';
   static const String USER_GENDER = "USER_GENDER";
+  static const String BASE_URL = "https://natigunta6673.herokuapp.com";
+  //static const String BASE_URL = "http://192.168.43.89:8001";
+
 }

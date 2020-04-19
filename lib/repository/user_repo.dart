@@ -1,4 +1,5 @@
 import 'package:contacts_service/contacts_service.dart';
+import 'package:flutterapp/model/RegistrationModel.dart';
 import 'package:flutterapp/util/constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,8 +11,8 @@ import 'dart:async';
 import 'dart:convert';
 
 class UserRepository {
-  final baseUrl = "https://natigunta6673.herokuapp.com"; //
-  //  final baseUrl = "http://192.168.43.89:8001";
+  //final baseUrl = "https://natigunta6673.herokuapp.com"; //
+
 
   Map<String, String> headers = {
     "Content-type": "application/json",
@@ -19,15 +20,28 @@ class UserRepository {
         "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
   };
 
+  Future<int> saveRegistration(RegistrationModel model) async {
+    // await Future.delayed(Duration(seconds: 1));
+    Response response = await http.post(
+      Constants.BASE_URL + "/auth/register",
+      headers: headers,
+      body: json.encode(model.toMap()),
+    );
+    final res = json.decode(response.body);
+    final userData = res["data"];
+    print("success" + userData.toString());
+    return 1;
+  }
+
   Future<String> authenticate({
     @required String username,
     @required String password,
   }) async {
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
-      baseUrl + "/auth/login",
+      Constants.BASE_URL + "/auth/login",
       headers: headers,
-      body: json.encode({"username": "rockajm@gmail.com", "password": "12345"}),
+      body: json.encode({"username": username, "password": password}),
     );
     final res = json.decode(response.body);
     final userData = res["user"];
@@ -61,7 +75,7 @@ class UserRepository {
 
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
-      baseUrl + "/api/secured/add_relation_user",
+      Constants.BASE_URL + "/api/secured/add_relation_user",
       headers: headers,
       body: json.encode(
         {
@@ -85,7 +99,7 @@ class UserRepository {
 
   /// get relation list of user
   Future<Map<String, Object>> getRelationList({@required int userId}) async {
-    String url = baseUrl +
+    String url = Constants.BASE_URL +
         "/api/secured/get_nested${userId == -1 ? '' : "?userId=${userId.toString()}"}";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.TOKEN);

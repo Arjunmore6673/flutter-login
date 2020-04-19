@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/blocs/auth_bloc/auth_state.dart';
 import 'package:flutterapp/blocs/bloc_login/login_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_event.dart';
 import 'package:flutterapp/blocs/bloc_login/login_state.dart';
@@ -64,6 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
+            if (state is AuthenticationAuthenticated) {
+              Nevigator.navigateNavigationHomePage(context);
+            }
             return Form(
               child: ListView(
                 children: <Widget>[

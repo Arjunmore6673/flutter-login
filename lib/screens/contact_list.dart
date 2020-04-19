@@ -55,6 +55,13 @@ class _ContactListPageState extends State<ContactListPage>
         'bhaiya',
         'brother',
         'aatya',
+        'aai',
+        'mother',
+        'mom',
+        'papa',
+        'pappa',
+        'baba',
+        'father'
       ];
 
       var regex =
@@ -95,6 +102,17 @@ class _ContactListPageState extends State<ContactListPage>
         } else if (regularExpression(obj.displayName, "mavshi")) {
           obj.familyName = "MAVSHI";
           obj.jobTitle = "FEMALE";
+        } else if (regularExpression(obj.displayName, "aai") ||
+            regularExpression(obj.displayName, "mother") ||
+            regularExpression(obj.displayName, "mom")) {
+          obj.familyName = "MOTHER";
+          obj.jobTitle = "FEMALE";
+        } else if (regularExpression(obj.displayName, "papa") ||
+            regularExpression(obj.displayName, "papaa") ||
+            regularExpression(obj.displayName, "father") ||
+            regularExpression(obj.displayName, "baba")) {
+          obj.familyName = "FATHER";
+          obj.jobTitle = "male";
         }
         contactsRelativesAddedRelatives.add(obj);
       }

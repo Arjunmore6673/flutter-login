@@ -39,11 +39,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     final userData = res["data"];
     if (userData == "feedback taken successfully") {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text("Feedback taken"),
-                content: Text("Thank you for your Feedback"),
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Feedback taken"),
+          content: Text("Thank you for your Feedback"),
+        ),
+      );
     }
     print(userData);
   }

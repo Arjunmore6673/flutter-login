@@ -4,7 +4,7 @@ class CardCommon extends StatelessWidget {
   final double elevation;
   final Widget child;
 
-  const CardCommon({Key key, @required this.child, this.elevation = 3})
+  const CardCommon({Key key, @required this.child, this.elevation = 10})
       : assert(elevation != null),
         super(key: key);
 
@@ -15,7 +15,7 @@ class CardCommon extends StatelessWidget {
         elevation: elevation,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        margin: EdgeInsets.all(5),
+        margin: EdgeInsets.all(10),
         // shape: RoundedRectangleBorder(
         //   borderRadius: BorderRadius.only(
         //       topRight: Radius.circular(40.0),

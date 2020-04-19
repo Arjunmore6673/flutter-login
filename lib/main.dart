@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
                 // return RelationScreen();
                 // return ContactListPage();
                 // return NavigationHomeScreen();
-                return RegisterScreen();
+                return NavigationHomeScreen();
               }
               if (state is AuthenticationUnauthenticated) {
                 // return RelationScreen();
@@ -117,7 +117,9 @@ class HexColor extends Color {
 
 class MyAppNew extends StatefulWidget {
   final UserRepository userRepository;
+
   MyAppNew({Key key, @required this.userRepository}) : super(key: key);
+
   @override
   _MyAppNewState createState() =>
       _MyAppNewState(key: key, userRepository: userRepository);
@@ -125,6 +127,7 @@ class MyAppNew extends StatefulWidget {
 
 class _MyAppNewState extends State<MyAppNew> {
   final UserRepository userRepository;
+
   _MyAppNewState({Key key, @required this.userRepository});
 
   @override
@@ -169,8 +172,8 @@ class _MyAppNewState extends State<MyAppNew> {
               //  return RegisterScreen();
               //  return ContactListPage();
               //return RelationScreen();
-               //return LoginPage(userRepository: userRepository);
-             return NavigationHomeScreen();
+              //return LoginPage(userRepository: userRepository);
+              return NavigationHomeScreen();
               // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {
