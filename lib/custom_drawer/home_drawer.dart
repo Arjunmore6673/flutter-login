@@ -3,6 +3,7 @@ import 'package:flutterapp/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutterapp/blocs/auth_bloc/auth_event.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer(
@@ -22,10 +23,19 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList> drawerList;
+  String image;
+
   @override
   void initState() {
     setdDrawerListArray();
     super.initState();
+    getImageUrl();
+  }
+
+
+  getImageUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    image = prefs.getString("userImage");
   }
 
   void setdDrawerListArray() {
@@ -110,7 +120,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             child: ClipRRect(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset('assets/images/userImage.png'),
+                              child: Image.network(
+                                  'https://qph.fs.quoracdn.net/main-qimg-d69406383d8106d2b9f257594aaeefb6'),
                             ),
                           ),
                         ),

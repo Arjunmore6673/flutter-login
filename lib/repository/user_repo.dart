@@ -64,7 +64,7 @@ class UserRepository {
             "email": '',
             "city": address
           },
-          "relation": "BROTHER"
+          "relation": relation,
         },
       ),
     );
@@ -106,11 +106,14 @@ class UserRepository {
     List<RelationModel> daji = [];
     List<RelationModel> other = [];
     model.forEach((obj) => {
-          if (obj.getRelation == "MAMA" || obj.getRelation == "MAMI")
+          if (obj.getRelation == null)
+            {other.add(obj)}
+          else if (obj.getRelation == "MAMA" || obj.getRelation == "MAMI")
             {mamaMami.add(obj)}
           else if (obj.getRelation == "KAKA" || obj.getRelation == "MAVSHI")
             {kakaMavshi.add(obj)}
-          else if (obj.getRelation == "BROTHER" || obj.getRelation == 'SISTER')
+          else if (obj.getRelation.contains("BROTHER") ||
+              obj.getRelation.contains('SISTER'))
             {broSis.add(obj)}
           else if (obj.getRelation == "DAJI")
             {daji.add(obj)}

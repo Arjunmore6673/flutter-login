@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
-
 import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutterapp/screens/searched_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ContactListPage extends StatefulWidget {
+class ContactListPage extends StatefulWidget  {
   @override
   _ContactListPageState createState() => _ContactListPageState();
 }
 
-class _ContactListPageState extends State<ContactListPage> {
+class _ContactListPageState extends State<ContactListPage> with AutomaticKeepAliveClientMixin{
   List<Contact> _contacts;
   List<Contact> contactsAll;
   List<Contact> deleted;
@@ -21,6 +20,9 @@ class _ContactListPageState extends State<ContactListPage> {
     super.initState();
     refreshContacts();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   removedContacts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -38,40 +40,76 @@ class _ContactListPageState extends State<ContactListPage> {
       print("granted");
       contactsAll =
           (await ContactsService.getContacts(withThumbnails: false)).toList();
-      var cc = contactsAll
-          .where(
-            (i) =>
-        regularExpression(i.displayName, 'mami') ||
-            regularExpression(i.displayName, 'kaka') ||
-            regularExpression(i.displayName, 'mavshi') ||
-            regularExpression(i.displayName, 'mama') ||
-            regularExpression(i.displayName, 'sister') ||
-            regularExpression(i.displayName, 'bro') ||
-            regularExpression(i.displayName, 'brother') ||
-            regularExpression(i.displayName, 'siso') ||
-            regularExpression(i.displayName, 'didi'),
-      )
-          .toList();
+
+      var keys = [
+        'mami',
+        'mama',
+        'kaka',
+        'mavshi',
+        'sister',
+        'siso',
+        'didi',
+        'tai',
+        'bro',
+        'bhaiya',
+        'brother',
+        'aatya',
+      ];
+
+      var regex =
+          new RegExp("\\b(?:${keys.join('|')})\\b", caseSensitive: false);
+      var contactsRelatives =
+          contactsAll.where((i) => regex.hasMatch(i.displayName)).toList();
+
+      List<Contact> contactsRelativesAddedRelatives=[];
+      for (var i = 0; i < contactsRelatives.length; i++) {
+        Contact obj = contactsRelatives[i];
+        if (regularExpression(obj.displayName, "mami")) {
+          obj.familyName = "MAMI";
+        } else if (regularExpression(obj.displayName, "MAMA")) {
+          obj.familyName = "MAMA";
+        } else if (regularExpression(obj.displayName, "KAKA")) {
+          obj.familyName = "KAKA";
+        } else if (regularExpression(obj.displayName, "SISTER") ||
+            regularExpression(obj.displayName, 'tai') ||
+            regularExpression(obj.displayName, 'siso') ||
+            regularExpression(obj.displayName, 'didi')) {
+          obj.familyName = "SISTER";
+        } else if (regularExpression(obj.displayName, "bro") ||
+            regularExpression(obj.displayName, 'brother') ||
+            regularExpression(obj.displayName, 'bhaiya') ||
+            regularExpression(obj.displayName, 'dada')) {
+          obj.familyName = "BROTHER";
+        } else if (regularExpression(obj.displayName, "aatya")) {
+          obj.familyName = "AATYA";
+        } else if (regularExpression(obj.displayName, "daji")) {
+          obj.familyName = "DAJI";
+        } else if (regularExpression(obj.displayName, "mavshi")) {
+          obj.familyName = "MAVSHI";
+        }
+        contactsRelativesAddedRelatives.add(obj);
+      }
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> listDeleted = prefs.getStringList("DELETED");
       if (listDeleted == null) {
         listDeleted = [];
       }
-      var filterredList = cc
+      var filteredList = contactsRelativesAddedRelatives
           .where((test) => !listDeleted.contains(test.displayName))
           .toList();
 
       setState(() {
-        _contacts = filterredList;
+        _contacts = filteredList;
       });
 
       // Lazy load thumbnails after rendering initial contacts.
-      for (final contact in contactsAll) {
-        ContactsService.getAvatar(contact).then((avatar) {
-          if (avatar == null) return; // Don't redraw if no change.
-          setState(() => contact.avatar = avatar);
-        });
-      }
+//      for (final contact in contactsAll) {
+//        ContactsService.getAvatar(contact).then((avatar) {
+//          if (avatar == null) return; // Don't redraw if no change.
+//          setState(() => contact.avatar = avatar);
+//        });
+//      }
     } else {
       print("he dont have persmission");
     }
@@ -90,39 +128,33 @@ class _ContactListPageState extends State<ContactListPage> {
     return Scaffold(
       body: SafeArea(
           child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: _contacts != null
-                    ? GridView.count(
-                  childAspectRatio: MediaQuery
-                      .of(context)
-                      .size
-                      .width /
-                      (MediaQuery
-                          .of(context)
-                          .size
-                          .height),
-                  crossAxisCount: 2,
-                  children: List.generate(
-                    _contacts?.length ?? 0,
-                        (int index) {
-                      return AnimationConfiguration.staggeredGrid(
-                        position: index,
-                        duration: const Duration(milliseconds: 375),
-                        columnCount: 2,
-                        child: ScaleAnimation(
-                          child: FadeInAnimation(
-                            child: SearchedContacts(
-                              contact: _contacts[index],
-                              onDelete: () => removeItem(index),
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: _contacts != null
+                ? GridView.count(
+                    childAspectRatio: MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height),
+                    crossAxisCount: 2,
+                    children: List.generate(
+                      _contacts?.length ?? 0,
+                      (int index) {
+                        return AnimationConfiguration.staggeredGrid(
+                          position: index,
+                          duration: const Duration(milliseconds: 375),
+                          columnCount: 2,
+                          child: ScaleAnimation(
+                            child: FadeInAnimation(
+                              child: SearchedContacts(
+                                contact: _contacts[index],
+                                onDelete: () => removeItem(index),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                )
+                        );
+                      },
+                    ),
+                  )
 
                 // ListView.builder(
                 //     itemCount: _contacts?.length ?? 0,
@@ -141,12 +173,12 @@ class _ContactListPageState extends State<ContactListPage> {
                 //       );
                 //     },
                 //   )
-                    : Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            ],
-          )),
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ),
+          ),
+        ],
+      )),
     );
   }
 
@@ -158,8 +190,7 @@ class _ContactListPageState extends State<ContactListPage> {
     list.add(_contacts[index].displayName);
     await prefs.setStringList("DELETED", list);
     setState(() {
-      _contacts = List.from(_contacts)
-        ..removeAt(index);
+      _contacts = List.from(_contacts)..removeAt(index);
     });
   }
 }

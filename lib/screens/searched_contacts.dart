@@ -33,11 +33,11 @@ class _SearchedContactsState extends State<SearchedContacts> {
     String relation;
     for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
       if (isSelected[0] == true) {
-        relation = 'MAVAS BHAU';
+        relation = 'MAVAS ';
       } else if (isSelected[1] == true) {
-        relation = 'CHULAT BHAU';
+        relation = 'CHULAT ';
       } else if (isSelected[1] == true) {
-        relation = 'MAME BHAU';
+        relation = 'MAME ';
       }
       return relation;
     }
@@ -64,7 +64,7 @@ class _SearchedContactsState extends State<SearchedContacts> {
             }
             if (state is RelationAddedState) {
               widget.onDelete();
-               Scaffold.of(ccc).showSnackBar(
+              Scaffold.of(ccc).showSnackBar(
                 SnackBar(
                   content: Text("Added successfully"),
                   backgroundColor: Colors.red,
@@ -295,13 +295,16 @@ class _SearchedContactsState extends State<SearchedContacts> {
             ),
             onPressed: () {
               print("ontap frjkldjfk j");
+              var listTest = ['mama', "mami", 'kaka', 'mavshi', 'aatya'];
               if (villageCityTextBox.text.length > 0) {
                 BlocProvider.of<RelationBloc>(ccc).add(RelationAddPressed(
                     name: widget.contact.displayName,
                     mobile: widget.contact.phones.elementAt(0).value,
                     email: '',
                     address: villageCityTextBox.text,
-                    relation: getSelectedRelation(),
+                    relation: !listTest.contains(widget.contact.familyName)
+                        ? widget.contact.familyName
+                        : getSelectedRelation() + widget.contact.familyName,
                     avtar: "widget.contact.avatar"));
               } else {
                 print("else");
