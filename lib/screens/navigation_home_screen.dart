@@ -75,8 +75,8 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
                 },
               ),
               TabData(
-                iconData: Icons.add,
-                title: "Add",
+                iconData: Icons.contacts,
+                title: "Contacts",
                 onclick: () {
                   final FancyBottomNavigationState fState =
                       bottomNavigationKey.currentState;

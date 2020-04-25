@@ -32,7 +32,6 @@ dependencies:
   flutter_staggered_animations: "^0.1.2"
   firebase_storage: ^3.1.5
   image_picker: ^0.6.5+2
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

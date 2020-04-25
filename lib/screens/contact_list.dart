@@ -15,7 +15,8 @@ class _ContactListPageState extends State<ContactListPage>
   List<Contact> _contacts;
   List<Contact> contactsAll;
   List<Contact> deleted;
-
+  TextEditingController editingController = TextEditingController();
+  var items = List<Contact>();
   @override
   initState() {
     super.initState();
@@ -129,6 +130,7 @@ class _ContactListPageState extends State<ContactListPage>
       setState(() {
         _contacts = filteredList;
       });
+      items.addAll(_contacts);
 
       // Lazy load thumbnails after rendering initial contacts.
 //      for (final contact in contactsAll) {
@@ -150,21 +152,59 @@ class _ContactListPageState extends State<ContactListPage>
     return exp.hasMatch(stringg);
   }
 
+  void filterSearchResults(String query) {
+    List<Contact> dummySearchList = List<Contact>();
+    dummySearchList.addAll(contactsAll);
+    if (query.isNotEmpty) {
+      List<Contact> dummyListData = List<Contact>();
+      dummySearchList.forEach((item) {
+        if (item.displayName.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        items.clear();
+        items.addAll(dummyListData);
+      });
+      return;
+    } else {
+      setState(() {
+        items.clear();
+        items.addAll(_contacts);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
           child: Column(
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 50, left: 5, right: 5),
+            child: TextField(
+              controller: editingController,
+              onChanged: (value) {
+                filterSearchResults(value);
+              },
+              decoration: InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)))),
+            ),
+          ),
           Expanded(
             flex: 2,
-            child: _contacts != null
+            child: items != null
                 ? GridView.count(
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height),
                     crossAxisCount: 2,
                     children: List.generate(
-                      _contacts?.length ?? 0,
+                      items?.length ?? 0,
                       (int index) {
                         return AnimationConfiguration.staggeredGrid(
                           position: index,
@@ -173,7 +213,7 @@ class _ContactListPageState extends State<ContactListPage>
                           child: ScaleAnimation(
                             child: FadeInAnimation(
                               child: SearchedContacts(
-                                contact: _contacts[index],
+                                contact: items[index],
                                 onDelete: () => removeItem(index),
                               ),
                             ),
