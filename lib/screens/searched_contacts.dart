@@ -87,7 +87,6 @@ class _SearchedContactsState extends State<SearchedContacts> {
           child: BlocBuilder<RelationBloc, RelationState>(
             builder: (ccc, state) {
               return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   getStack(ccc),
                 ],
@@ -109,7 +108,7 @@ class _SearchedContactsState extends State<SearchedContacts> {
           child: Column(
             children: <Widget>[
               CardCommon(
-                elevation: 5,
+                elevation: 8,
                 child: Column(
                   children: <Widget>[
                     (_uploadedFileURL == null || _uploadedFileURL == "")
@@ -126,8 +125,7 @@ class _SearchedContactsState extends State<SearchedContacts> {
                             url: _uploadedFileURL,
                             redius: 40,
                           ),
-                    TextCommon(
-                        text: widget.contact.displayName, fontSize: 20),
+                    TextCommon(text: widget.contact.displayName, fontSize: 20),
                     TextCommon(
                         text: widget.contact.phones.elementAt(0).value,
                         fontSize: 18),
@@ -192,8 +190,7 @@ class _SearchedContactsState extends State<SearchedContacts> {
                             ),
                           )
                         : SizedBox(),
-                    (regularExpression(
-                                widget.contact.displayName, "sister") ||
+                    (regularExpression(widget.contact.displayName, "sister") ||
                             regularExpression(
                                 widget.contact.displayName, "siso") ||
                             regularExpression(
@@ -281,7 +278,6 @@ class _SearchedContactsState extends State<SearchedContacts> {
             child: Padding(
               padding: EdgeInsets.all(15),
               child: CardCommon(
-                elevation: 5,
                 child: Icon(
                   Icons.close,
                   color: Colors.red,
