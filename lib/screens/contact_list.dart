@@ -182,7 +182,7 @@ class _ContactListPageState extends State<ContactListPage>
           child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 50, left: 5, right: 5),
+            padding: EdgeInsets.only(top: 50, left: 21, right: 20),
             child: TextField(
               controller: editingController,
               onChanged: (value) {
@@ -200,6 +200,7 @@ class _ContactListPageState extends State<ContactListPage>
             flex: 2,
             child: items != null
                 ? GridView.count(
+                    padding: EdgeInsets.all(14),
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height),
                     crossAxisCount: 2,

@@ -2,6 +2,7 @@ import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutterapp/app_theme.dart';
 import 'package:flutterapp/custom_drawer/drawer_user_controller.dart';
 import 'package:flutterapp/custom_drawer/home_drawer.dart';
+import 'package:flutterapp/main.dart';
 import 'package:flutterapp/screens/contact_list.dart';
 import 'package:flutterapp/screens/feedback_screen.dart';
 import 'package:flutterapp/screens/help_screen.dart';
@@ -63,35 +64,44 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
                       index: currentPage,
                       children: screens,
                     )),
-          bottomNavigationBar: FancyBottomNavigation(
-            tabs: [
-              TabData(
-                iconData: Icons.home,
-                title: "Home",
-                onclick: () {
-                  final FancyBottomNavigationState fState =
-                      bottomNavigationKey.currentState;
-                  fState.setPage(0);
-                },
-              ),
-              TabData(
-                iconData: Icons.contacts,
-                title: "Contacts",
-                onclick: () {
-                  final FancyBottomNavigationState fState =
-                      bottomNavigationKey.currentState;
-                  fState.setPage(1);
-                },
-              )
-            ],
-            initialSelection: 0,
-            key: bottomNavigationKey,
-            onTabChangedListener: (position) {
-              setState(() {
-                currentPage = position;
-              });
-            },
-          ),
+
+          bottomNavigationBar: AnimatedBottomNav(
+              currentIndex: currentPage,
+              onChange: (index) {
+                setState(() {
+                  currentPage = index;
+                });
+              }),
+
+          // bottomNavigationBar: FancyBottomNavigation(
+          //   tabs: [
+          //     TabData(
+          //       iconData: Icons.home,
+          //       title: "Home",
+          //       onclick: () {
+          //         final FancyBottomNavigationState fState =
+          //             bottomNavigationKey.currentState;
+          //         fState.setPage(0);
+          //       },
+          //     ),
+          //     TabData(
+          //       iconData: Icons.contacts,
+          //       title: "Contacts",
+          //       onclick: () {
+          //         final FancyBottomNavigationState fState =
+          //             bottomNavigationKey.currentState;
+          //         fState.setPage(1);
+          //       },
+          //     )
+          //   ],
+          //   initialSelection: 0,
+          //   key: bottomNavigationKey,
+          //   onTabChangedListener: (position) {
+          //     setState(() {
+          //       currentPage = position;
+          //     });
+          //   },
+          // ),
         ),
       ),
     );
@@ -137,4 +147,104 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   //       return ContactListPage();
   //   }
   // }
+}
+
+class AnimatedBottomNav extends StatelessWidget {
+  final int currentIndex;
+  final Function(int) onChange;
+  const AnimatedBottomNav({Key key, this.currentIndex, this.onChange})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: kToolbarHeight,
+      decoration: BoxDecoration(color: HexColor("#f9f9f9")),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: InkWell(
+              onTap: () => onChange(0),
+              child: BottomNavItem(
+                icon: Icons.home,
+                title: "Home",
+                isActive: currentIndex == 0,
+              ),
+            ),
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () => onChange(1),
+              child: BottomNavItem(
+                icon: Icons.verified_user,
+                title: "Contacts",
+                isActive: currentIndex == 1,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomNavItem extends StatelessWidget {
+  final bool isActive;
+  final IconData icon;
+  final Color activeColor;
+  final Color inactiveColor;
+  final String title;
+  const BottomNavItem(
+      {Key key,
+      this.isActive = false,
+      this.icon,
+      this.activeColor,
+      this.inactiveColor,
+      this.title})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      transitionBuilder: (child, animation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0.0, 1.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      duration: Duration(milliseconds: 500),
+      reverseDuration: Duration(milliseconds: 200),
+      child: isActive
+          ? Container(
+              color: HexColor("#f9f9f9"),
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: activeColor ?? Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Container(
+                    width: 5.0,
+                    height: 5.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: activeColor ?? Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Icon(
+              icon,
+              color: inactiveColor ?? Colors.grey,
+            ),
+    );
+  }
 }
