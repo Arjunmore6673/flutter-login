@@ -3,6 +3,7 @@ import 'package:flutterapp/app_theme.dart';
 import 'package:flutterapp/custom_drawer/drawer_user_controller.dart';
 import 'package:flutterapp/custom_drawer/home_drawer.dart';
 import 'package:flutterapp/main.dart';
+import 'package:flutterapp/screens/about_us.dart';
 import 'package:flutterapp/screens/contact_list.dart';
 import 'package:flutterapp/screens/feedback_screen.dart';
 import 'package:flutterapp/screens/help_screen.dart';
@@ -34,7 +35,8 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       ContactListPage(),
       HelpScreen(),
       FeedbackScreen(),
-      InviteFriend()
+      InviteFriend(),
+      AboutUs()
     ];
     drawerIndex = DrawerIndex.HOME;
     screenView = relationScreen;
@@ -128,6 +130,11 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         setState(() {
           // screenView = InviteFriend();
           currentPage = 4;
+        });
+      } else if (drawerIndex == DrawerIndex.About) {
+        setState(() {
+          // screenView = InviteFriend();
+          currentPage = 5;
         });
       } else {
         //do in your way......
