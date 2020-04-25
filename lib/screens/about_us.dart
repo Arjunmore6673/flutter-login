@@ -45,8 +45,7 @@ class _AboutUsState extends State<AboutUs> {
                 Container(
                   padding: const EdgeInsets.only(top: 16),
                   child: const Text(
-                    "We are trying to connect all Realtives\n" +
-                        " know many relatives",
+                    "We are trying to connect all Realtives\n",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,

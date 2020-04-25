@@ -7,8 +7,10 @@ import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
+import 'package:flutterapp/screens/common/CenterInkText.dart';
 import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
 import 'package:flutterapp/screens/common/ProfileImgAndDetailsCommon.dart';
+import 'package:flutterapp/screens/common/TextCommon.dart';
 import 'package:flutterapp/util/constants.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,110 +55,95 @@ class _ViewProfileState extends State<ViewProfile> {
   }
 
   getProfileWidget() {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              getImageContainer(),
-              const SizedBox(height: 10.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    height: 35.0,
-                    child: RaisedButton(
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15.0),
-                        ),
+    return Column(
+      children: <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            getImageContainer(),
+            TextCommon(
+              text: widget.model.name,
+              fontSize: 30,
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  height: 35.0,
+                  child: RaisedButton(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
                       ),
-                      color: Colors.white,
-                      child: Row(
-                        children: <Widget>[
-                          Text('Call', style: TextStyle(color: Colors.black)),
-                          SizedBox(width: 10),
-                          Icon(Icons.call),
-                        ],
-                      ),
-                      onPressed: () {},
                     ),
-                  ),
-                  Container(
-                    height: 35.0,
-                    child: RaisedButton(
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15.0),
-                        ),
-                      ),
-                      color: Colors.white,
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.message),
-                          SizedBox(width: 10),
-                          Text('Message',
-                              style: TextStyle(color: Colors.black)),
-                        ],
-                      ),
-                      onPressed: () {},
+                    color: Colors.white,
+                    child: Row(
+                      children: <Widget>[
+                        Text('Call', style: TextStyle(color: Colors.black)),
+                        SizedBox(width: 10),
+                        Icon(Icons.call),
+                      ],
                     ),
+                    onPressed: () {},
                   ),
-                ],
-              ),
-            ],
-          ),
-          UserInfo(
-            model: model,
-          ),
-          // Container(
-          //   child: BlocBuilder<RelationBloc, RelationState>(
-          //     builder: (context, state) {
-          //       if (state is RelationLoadingState) {
-          //         return Center(child: CircularProgressIndicator());
-          //       }
-          //       if (state is RelationLoadFailureState) {
-          //         return Text("error..");
-          //       }
-          //       if (state is RelationLoadedState) {
-          //         return geHisRelatives(state.data);
-          //       }
-          //       return Text("initial ");
-          //     },
-          //   ),
-          // )
-        ],
-      ),
+                ),
+                Container(
+                  height: 35.0,
+                  child: RaisedButton(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                    ),
+                    color: Colors.white,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.message),
+                        SizedBox(width: 10),
+                        Text('Message', style: TextStyle(color: Colors.black)),
+                      ],
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 20.0),
+
+        UserInfo(
+          model: model,
+        ),
+        // Container(
+        //   child: BlocBuilder<RelationBloc, RelationState>(
+        //     builder: (context, state) {
+        //       if (state is RelationLoadingState) {
+        //         return Center(child: CircularProgressIndicator());
+        //       }
+        //       if (state is RelationLoadFailureState) {
+        //         return Text("error..");
+        //       }
+        //       if (state is RelationLoadedState) {
+        //         return geHisRelatives(state.data);
+        //       }
+        //       return Text("initial ");
+        //     },
+        //   ),
+        // )
+      ],
     );
   }
 
   getImageContainer() {
-    final String placeHolder = "";
     return Stack(
       children: <Widget>[
-        Ink(
-          height: 200,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(
-                    _uploadedFileURL == null || _uploadedFileURL == ""
-                        ? placeHolder
-                        : _uploadedFileURL),
-                fit: BoxFit.cover),
-          ),
-        ),
-        Ink(
-          height: 200,
-          decoration: BoxDecoration(
-            color: Colors.black38,
-          ),
-        ),
         Container(
           width: double.infinity,
-          margin: const EdgeInsets.only(top: 160),
+          margin: const EdgeInsets.only(top: 10),
           child: Center(
             child: Stack(
               alignment: Alignment.center,
@@ -169,6 +156,7 @@ class _ViewProfileState extends State<ViewProfile> {
                             : 'assets/women.jpg'),
                       )
                     : CircleAvatarCommon(
+                        assetImage: true,
                         url: _uploadedFileURL,
                       ),
                 Positioned(
@@ -285,7 +273,7 @@ class UserInfo extends StatelessWidget {
           Card(
             child: Container(
               alignment: Alignment.topLeft,
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(5),
               child: Column(
                 children: <Widget>[
                   Column(
@@ -295,10 +283,14 @@ class UserInfo extends StatelessWidget {
                         tiles: [
                           ListTile(
                             contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 4),
+                                horizontal: 12, vertical: 1),
                             leading: Icon(Icons.person),
                             title: Text("Relation"),
-                            subtitle: Text(model.relation),
+                            subtitle: Text(model.relation,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                )),
                           ),
                           ListTile(
                             contentPadding: EdgeInsets.symmetric(
@@ -317,13 +309,11 @@ class UserInfo extends StatelessWidget {
                             title: Text("Phone"),
                             subtitle: Text(model.mobile),
                           ),
-                          ListTile(
-                            leading: Icon(Icons.person),
-                            title: Text("About Me"),
-                            subtitle: Text(
-                                "This is a about me link and you can khow about " +
-                                    " me in this section."),
-                          ),
+                          // ListTile(
+                          //   leading: Icon(Icons.person),
+                          //   title: Text("About Me"),
+                          //   subtitle: Text(""),
+                          // ),
                         ],
                       ),
                     ],

@@ -24,8 +24,9 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList> drawerList;
-  String name="";
-  String image="";
+  String name = "";
+  String image = "";
+  String mobile = "";
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     image = prefs.getString("userImage");
     name = prefs.getString(Constants.USER_NAME);
+    mobile = prefs.getString(Constants.USER_MOBILE);
   }
 
   void setdDrawerListArray() {
@@ -123,8 +125,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               child: ClipRRect(
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(60.0)),
-                                child: Image.network(
-                                    'https://qph.fs.quoracdn.net/main-qimg-d69406383d8106d2b9f257594aaeefb6'),
+                                child: Image.network(image == null ||
+                                        image == ""
+                                    ? 'https://qph.fs.quoracdn.net/main-qimg-d69406383d8106d2b9f257594aaeefb6'
+                                    : image),
                               ),
                             ),
                           ),
@@ -133,16 +137,24 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     ),
                   ),
                   Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 8, left: 4),
-                      child: Text(
-                        name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.grey,
-                          fontSize: 18,
-                        ),
+                    child: Text(
+                      name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.grey,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      mobile,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.grey,
+                        fontSize: 15,
                       ),
                     ),
                   ),

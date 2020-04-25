@@ -183,17 +183,28 @@ class _ContactListPageState extends State<ContactListPage>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(top: 50, left: 21, right: 20),
-            child: TextField(
-              controller: editingController,
-              onChanged: (value) {
-                filterSearchResults(value);
-              },
-              decoration: InputDecoration(
+            child: Container(
+              height: 50,
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                controller: editingController,
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
+                decoration: InputDecoration(
                   labelText: "Search",
                   hintText: "Search",
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)))),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.0),
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.all(3)
+                ),
+              ),
             ),
           ),
           Expanded(
