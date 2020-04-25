@@ -20,6 +20,7 @@ class RelationAddPressed extends RelationEvents {
   final String name;
   final String mobile;
   final String email;
+  final String image;
   final String gender;
   final String address;
   final String relation;
@@ -29,6 +30,7 @@ class RelationAddPressed extends RelationEvents {
       {@required this.name,
       this.mobile,
       this.email,
+      this.image,
       this.gender,
       this.address,
       this.relation,

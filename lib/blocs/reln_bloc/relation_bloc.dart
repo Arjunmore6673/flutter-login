@@ -43,6 +43,7 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
           name: event.name,
           mobile: event.mobile,
           email: event.email,
+          image: event.image,
           gender: event.gender,
           address: event.address,
           relation: event.relation,

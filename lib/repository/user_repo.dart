@@ -13,7 +13,6 @@ import 'dart:convert';
 class UserRepository {
   //final baseUrl = "https://natigunta6673.herokuapp.com"; //
 
-
   Map<String, String> headers = {
     "Content-type": "application/json",
     "Authorization":
@@ -51,15 +50,15 @@ class UserRepository {
     return token;
   }
 
-  Future<String> addRelation({
-    @required String name,
-    @required String mobile,
-    @required String email,
-    @required String gender,
-    @required String address,
-    @required String relation,
-    @required String avtar,
-  }) async {
+  Future<String> addRelation(
+      {@required String name,
+      @required String mobile,
+      @required String email,
+      @required String image,
+      @required String gender,
+      @required String address,
+      @required String relation,
+      @required String avtar}) async {
     /// token
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.TOKEN);
@@ -72,7 +71,6 @@ class UserRepository {
     String outputRemovedDash = output.replaceAll('-', '');
     var mobileFinal =
         outputRemovedDash.substring(outputRemovedDash.length - 10);
-
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
       Constants.BASE_URL + "/api/secured/add_relation_user",
@@ -83,6 +81,7 @@ class UserRepository {
             "name": name,
             "mobile": mobileFinal,
             "gender": gender,
+            "image": image,
             "email": '',
             "city": address
           },

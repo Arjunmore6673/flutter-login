@@ -27,15 +27,16 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     super.initState();
+    RelationScreen relationScreen = new RelationScreen();
     screens = [
-      RelationScreen(),
+      relationScreen,
       ContactListPage(),
       HelpScreen(),
       FeedbackScreen(),
       InviteFriend()
     ];
     drawerIndex = DrawerIndex.HOME;
-    screenView = new RelationScreen();
+    screenView = relationScreen;
   }
 
   @override
@@ -56,12 +57,12 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
               onDrawerCall: (DrawerIndex drawerIndexdata) {
                 changeIndex(drawerIndexdata);
               },
-              screenView: currentPage != 0
-                  ? IndexedStack(
+              screenView: currentPage == 0
+                  ? screenView
+                  : IndexedStack(
                       index: currentPage,
                       children: screens,
-                    )
-                  : screenView),
+                    )),
           bottomNavigationBar: FancyBottomNavigation(
             tabs: [
               TabData(
@@ -105,7 +106,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         });
       } else if (drawerIndex == DrawerIndex.Help) {
         setState(() {
-          screenView = HelpScreen();
+          // screenView = HelpScreen();
           currentPage = 2;
         });
       } else if (drawerIndex == DrawerIndex.FeedBack) {

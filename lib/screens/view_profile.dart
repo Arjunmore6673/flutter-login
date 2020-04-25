@@ -1,58 +1,66 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
-import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
-import 'package:flutterapp/screens/common/ExpandableCardCommon.dart';
 import 'package:flutterapp/screens/common/ProfileImgAndDetailsCommon.dart';
+import 'package:flutterapp/util/constants.dart';
+import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
+import 'package:meta/meta.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ViewProfile extends StatelessWidget {
+class ViewProfile extends StatefulWidget {
   final RelationModel model;
+  ViewProfile({Key key, @required this.model}) : super(key: key);
 
-  ViewProfile({@required this.model});
+  @override
+  _ViewProfileState createState() => _ViewProfileState();
+}
+
+class _ViewProfileState extends State<ViewProfile> {
+  File _image;
+  String _uploadedFileURL;
+  bool isLoading = false;
+  RelationModel model;
+
+  @override
+  void initState() {
+    super.initState();
+    model = widget.model;
+    _uploadedFileURL = widget.model.image;
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(model.toString() + ")____(");
-    return Scaffold(
-      body: BlocProvider(
-        create: (BuildContext context) => RelationBloc(
-          UserRepository(),
-        )..add(RelationListPressed(userId: model.id)),
-        child: getProfileWidget(),
+    return Container(
+      child: Scaffold(
+        body: BlocProvider(
+          create: (BuildContext context) => RelationBloc(
+            UserRepository(),
+          )..add(RelationListPressed(userId: widget.model.id)),
+          child: getProfileWidget(),
+        ),
       ),
     );
   }
 
   getProfileWidget() {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          flex: 2,
-          child: Column(
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              (model.image == null)
-                  ? CircleAvatarCommon(
-                      assetImage: true,
-                      url: (model.gender == 'MALE'
-                          ? 'assets/men.jpg'
-                          : 'assets/women.jpg'))
-                  : CircleAvatarCommon(url: model.image),
-              SizedBox(height: 30),
-              TextView(text: "${model.name}", fontFamily: 'Mali', fontSize: 30),
-              SizedBox(height: 10),
-              TextView(text: "${model.mobile}", fontFamily: 'Roboto'),
-              SizedBox(height: 10),
-              TextView(text: "${model.email}", fontFamily: 'Roboto'),
-              SizedBox(height: 10),
-              TextView(text: "Pune maharashtra", fontFamily: 'Roboto'),
-              SizedBox(height: 10),
-              TextView(text: "${model.relation}", fontFamily: 'Roboto'),
-              SizedBox(height: 30),
+              getImageContainer(),
+              const SizedBox(height: 10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -98,32 +106,141 @@ class ViewProfile extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: BlocBuilder<RelationBloc, RelationState>(
-            builder: (context, state) {
-              if (state is RelationLoadingState) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (state is RelationLoadFailureState) {
-                return Text("error..");
-              }
-              if (state is RelationLoadedState) {
-                return getThirdBloc(state.data);
-              }
-              return Text("initial ");
-            },
+          UserInfo(
+            model: model,
+          ),
+          // Container(
+          //   child: BlocBuilder<RelationBloc, RelationState>(
+          //     builder: (context, state) {
+          //       if (state is RelationLoadingState) {
+          //         return Center(child: CircularProgressIndicator());
+          //       }
+          //       if (state is RelationLoadFailureState) {
+          //         return Text("error..");
+          //       }
+          //       if (state is RelationLoadedState) {
+          //         return geHisRelatives(state.data);
+          //       }
+          //       return Text("initial ");
+          //     },
+          //   ),
+          // )
+        ],
+      ),
+    );
+  }
+
+  getImageContainer() {
+    final String placeHolder = "";
+    return Stack(
+      children: <Widget>[
+        Ink(
+          height: 200,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(
+                    _uploadedFileURL == null || _uploadedFileURL == ""
+                        ? placeHolder
+                        : _uploadedFileURL),
+                fit: BoxFit.cover),
           ),
         ),
+        Ink(
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.black38,
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 160),
+          child: Center(
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                _uploadedFileURL == null || _uploadedFileURL == ""
+                    ? CircleAvatarCommon(
+                        assetImage: true,
+                        url: (model.name == 'MALE'
+                            ? 'assets/men.jpg'
+                            : 'assets/women.jpg'),
+                      )
+                    : CircleAvatarCommon(
+                        url: _uploadedFileURL,
+                      ),
+                Positioned(
+                  bottom: -25,
+                  left: 60,
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: GestureDetector(
+                      onTap: chooseFile,
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        child: Icon(
+                          Icons.add_a_photo,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                isLoading ? CircularProgressIndicator() : SizedBox()
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
 
-  Widget getThirdBloc(Map<String, Object> data) {
+  Future chooseFile() async {
+    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      _image = image;
+      uploadFile();
+    });
+  }
+
+  Future uploadFile() async {
+    setState(() {
+      isLoading = true;
+    });
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${Path.basename(_image.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      print(fileURL);
+      setState(() {
+        _uploadedFileURL = fileURL;
+        isLoading = false;
+      });
+      saveImageUrl(fileURL);
+    });
+  }
+
+  saveImageUrl(String url) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(Constants.TOKEN);
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Token " + token
+    };
+    Response response = await http.put(
+      Constants.BASE_URL + "/api/secured/update_user_image",
+      headers: headers,
+      body: json.encode({"url": url, "userId": model.id}),
+    );
+    final res = json.decode(response.body);
+    final userData = res["data"];
+    print("successfully updated" + userData.toString());
+  }
+
+  Widget geHisRelatives(Map<String, Object> data) {
     List<RelationModel> mamaMami = data["mamaMami"];
     List<RelationModel> kakaMavshi = data["kakaMavshi"];
     List<RelationModel> broSis = data["broSis"];
@@ -156,27 +273,66 @@ class ViewProfile extends StatelessWidget {
   }
 }
 
-class TextView extends StatelessWidget {
-  const TextView(
-      {Key key,
-      @required this.text,
-      this.fontFamily = 'Ink free',
-      this.fontSize = 20})
-      : super(key: key);
-  final String text;
-  final String fontFamily;
-  final double fontSize;
-
+class UserInfo extends StatelessWidget {
+  final RelationModel model;
+  UserInfo({this.model});
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize,
-        color: Colors.purple,
-        fontWeight: FontWeight.bold,
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          Card(
+            child: Container(
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.all(15),
+              child: Column(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      ...ListTile.divideTiles(
+                        color: Colors.grey,
+                        tiles: [
+                          ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
+                            leading: Icon(Icons.person),
+                            title: Text("Relation"),
+                            subtitle: Text(model.relation),
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
+                            leading: Icon(Icons.my_location),
+                            title: Text("Location"),
+                            subtitle: Text(model.getMobile),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.email),
+                            title: Text("Email"),
+                            subtitle: Text(model.email),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.phone),
+                            title: Text("Phone"),
+                            subtitle: Text(model.mobile),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.person),
+                            title: Text("About Me"),
+                            subtitle: Text(
+                                "This is a about me link and you can khow about " +
+                                    " me in this section."),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

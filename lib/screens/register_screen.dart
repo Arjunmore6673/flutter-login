@@ -65,7 +65,7 @@ class RegisterScreenState extends State<RegisterScreen> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Form(
-                key: formKey, // you missed out on this!!!
+                key: formKey, 
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: Column(

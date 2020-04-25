@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterapp/repository/user_repo.dart';
+import 'package:flutterapp/screens/home_screen.dart';
 import 'package:flutterapp/screens/loading.dart';
 import 'package:flutterapp/screens/login_page.dart';
 import 'package:flutterapp/screens/navigation_home_screen.dart';
@@ -173,12 +174,14 @@ class _MyAppNewState extends State<MyAppNew> {
               //  return ContactListPage();
               //return RelationScreen();
               //return LoginPage(userRepository: userRepository);
+            //  return MyHomePage();
               return NavigationHomeScreen();
               // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {
               //  return RegisterScreen();
-              return LoginPage(userRepository: userRepository);
+                 //return MyHomePage();
+            return LoginPage(userRepository: userRepository);
             }
             if (state is AuthenticationLoading) {
               return LoadingIndicator();

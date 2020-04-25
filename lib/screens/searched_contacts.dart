@@ -1,12 +1,19 @@
+import 'dart:io';
+
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
+import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/common/CardCommon.dart';
+import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
 import 'package:flutterapp/screens/common/TextCommon.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 class SearchedContacts extends StatefulWidget {
   final Contact contact;
@@ -22,6 +29,11 @@ class SearchedContacts extends StatefulWidget {
 
 class _SearchedContactsState extends State<SearchedContacts> {
   List<bool> isSelected;
+
+  File _image;
+  String _uploadedFileURL;
+  bool isLoading = false;
+  RelationModel model;
 
   @override
   void initState() {
@@ -100,13 +112,20 @@ class _SearchedContactsState extends State<SearchedContacts> {
                 elevation: 8,
                 child: Column(
                   children: <Widget>[
-                    (widget.contact.avatar != null &&
-                            widget.contact.avatar.length > 0)
-                        ? CircleAvatar(
-                            backgroundImage: MemoryImage(widget.contact.avatar),
-                            radius: 40)
-                        : CircleAvatar(
-                            child: Text(widget.contact.initials()), radius: 40),
+                    (_uploadedFileURL == null || _uploadedFileURL == "")
+                        ? (widget.contact.avatar != null &&
+                                widget.contact.avatar.length > 0)
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    MemoryImage(widget.contact.avatar),
+                                radius: 40)
+                            : CircleAvatar(
+                                child: Text(widget.contact.initials()),
+                                radius: 40)
+                        : CircleAvatarCommon(
+                            url: _uploadedFileURL,
+                            redius: 40,
+                          ),
                     TextCommon(text: widget.contact.displayName, fontSize: 20),
                     TextCommon(
                         text: widget.contact.phones.elementAt(0).value,
@@ -269,6 +288,24 @@ class _SearchedContactsState extends State<SearchedContacts> {
             ),
           ),
         ),
+        Positioned(
+          top: 40,
+          left: 90,
+          child: GestureDetector(
+            onTap: chooseFile,
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: CardCommon(
+                elevation: 1,
+                child: Icon(
+                  Icons.camera_alt,
+                  color: Colors.red,
+                  size: 19,
+                ),
+              ),
+            ),
+          ),
+        ),
         Container(
           width: 100,
           alignment: Alignment.center,
@@ -301,12 +338,14 @@ class _SearchedContactsState extends State<SearchedContacts> {
                     name: widget.contact.displayName,
                     mobile: widget.contact.phones.elementAt(0).value,
                     email: '',
+                    image: _uploadedFileURL,
                     address: villageCityTextBox.text,
                     gender: widget.contact.jobTitle,
                     relation: !listTest.contains(widget.contact.familyName)
                         ? widget.contact.familyName
                         : getSelectedRelation() + widget.contact.familyName,
                     avtar: ""));
+                _uploadedFileURL = "";
               } else {
                 print("else");
                 Scaffold.of(context).showSnackBar(
@@ -329,5 +368,31 @@ class _SearchedContactsState extends State<SearchedContacts> {
       caseSensitive: false,
     );
     return exp.hasMatch(stringg);
+  }
+
+  Future chooseFile() async {
+    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      _image = image;
+      uploadFile();
+    });
+  }
+
+  Future uploadFile() async {
+    setState(() {
+      isLoading = true;
+    });
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${Path.basename(_image.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      print(fileURL);
+      setState(() {
+        _uploadedFileURL = fileURL;
+        isLoading = false;
+      });
+    });
   }
 }
