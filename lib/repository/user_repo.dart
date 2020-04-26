@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutterapp/blocs/contact_bloc/contact_event.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
 import 'package:flutterapp/util/constants.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,6 +12,8 @@ import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:path/path.dart' as Path;
+
 import 'dart:convert';
 
 class UserRepository {
@@ -247,5 +253,38 @@ class UserRepository {
       });
     }
     return contactWithAvtar;
+  }
+
+  Future<String> uploadFile(File image) async {
+    try {
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('images/${Path.basename(image.path)}}');
+      StorageUploadTask uploadTask = storageReference.putFile(image);
+      await uploadTask.onComplete;
+      print('File Uploaded');
+      return await storageReference.getDownloadURL();
+    } catch (e) {
+      print(e);
+      return e;
+    }
+  }
+
+  Future<String> updateUserDetails(RemovedContact model) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(Constants.TOKEN);
+    var id = prefs.getInt(Constants.USER_ID);
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Token " + token
+    };
+    Response response = await http.put(
+      Constants.BASE_URL + "/api/secured/update_user_image",
+      headers: headers,
+      body: json.encode({"url": "", "userId": id}),
+    );
+    final res = json.decode(response.body);
+    final userData = res["data"];
+    print("successfully updated" + userData.toString());
   }
 }

@@ -9,6 +9,7 @@ class CircleAvatarCommon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("url" + url);
     return Padding(
       padding: EdgeInsets.all(5),
       child: CircleAvatar(

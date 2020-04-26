@@ -4,6 +4,8 @@ import 'package:flutterapp/blocs/auth_bloc/auth_state.dart';
 import 'package:flutterapp/blocs/bloc_login/login_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_event.dart';
 import 'package:flutterapp/blocs/bloc_login/login_state.dart';
+import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
+import 'package:flutterapp/screens/common/CommonIconButton.dart';
 import 'package:flutterapp/screens/common/navigator.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,14 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-/* void _performLogin() {
-   // This is just a demo, so no actual login here.
-   final snackbar = new SnackBar(
-     content: new Text('Email: $_email, password: $_password'),
-   );
-
-   scaffoldKey.currentState.showSnackBar(snackbar);
- }*/
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
@@ -76,9 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          FlutterLogo(
-                            size: 100.0,
-                          ),
+                          CircleAvatarCommon(
+                            redius: 80,
+                            assetImage: true,
+                            url: "assets/images/Relatives.png",
+                          )
                         ],
                       )),
                   Container(
@@ -107,37 +103,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         onSaved: (String value) {}),
                   ),
                   Container(
+                    margin: EdgeInsets.only(top:20),
                     width: screenSize.width,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                          height: 50.0,
-                          margin: const EdgeInsets.only(left: 10.0, top: 30.0),
-                          child: RaisedButton(
-                            child: Text(
-                              'Login',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: state is! LoginLoading
-                                ? _onLoginButtonPressed
-                                : null,
-                            color: Colors.deepPurple,
-                          ),
+                        CommonIconButton(
+                          buttonText: "Login",
+                          onTap: state is! LoginLoading
+                              ? _onLoginButtonPressed
+                              : null,
+                          color: Colors.white,
+                          icon: Icons.verified_user,
                         ),
-                        Container(
-                          height: 50.0,
-                          margin: const EdgeInsets.only(left: 20.0, top: 30.0),
-                          child: RaisedButton(
-                            child: Text(
-                              'Registration',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: () {
-                              Nevigator.navigateRegisterPage(context);
-                            },
-                            color: Colors.deepPurple,
-                          ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        CommonIconButton(
+                          buttonText: "Register",
+                          onTap: () {
+                            Nevigator.navigateRegisterPage(context);
+                          },
+                          color: Colors.white,
                         ),
                       ],
                     ),

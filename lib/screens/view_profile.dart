@@ -7,7 +7,6 @@ import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
-import 'package:flutterapp/screens/common/CenterInkText.dart';
 import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
 import 'package:flutterapp/screens/common/ProfileImgAndDetailsCommon.dart';
 import 'package:flutterapp/screens/common/TextCommon.dart';
