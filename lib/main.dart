@@ -13,7 +13,6 @@ import 'package:flutterapp/screens/register_screen.dart';
 import 'package:flutterapp/screens/relation_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'blocs/auth_bloc/auth_bloc.dart';
 import 'blocs/auth_bloc/auth_event.dart';
 import 'blocs/auth_bloc/auth_state.dart';
@@ -92,8 +91,8 @@ class MyApp extends StatelessWidget {
               }
               if (state is AuthenticationUnauthenticated) {
                 // return RelationScreen();
-                // return LoginPage(userRepository: userRepository);
-                return NavigationHomeScreen();
+                return LoginPage(userRepository: userRepository);
+                //    return NavigationHomeScreen();
               }
               if (state is AuthenticationLoading) {
                 return LoadingIndicator();
@@ -175,15 +174,16 @@ class _MyAppNewState extends State<MyAppNew> {
               //  return ContactListPage();
               //return RelationScreen();
               //return LoginPage(userRepository: userRepository);
-            //  return MyHomePage();
-             //  return LoginPage(userRepository: userRepository);
-            return  Profile();
+              //  return MyHomePage();
+              //  return LoginPage(userRepository: userRepository);
+              // return Profile();
+              return NavigationHomeScreen();
               // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {
               //  return RegisterScreen();
-                 //return MyHomePage();
-            return LoginPage(userRepository: userRepository);
+              //return MyHomePage();
+              return LoginPage(userRepository: userRepository);
             }
             if (state is AuthenticationLoading) {
               return LoadingIndicator();

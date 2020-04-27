@@ -17,6 +17,7 @@ import 'package:path/path.dart' as Path;
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewProfile extends StatefulWidget {
   final RelationModel model;
@@ -53,6 +54,14 @@ class _ViewProfileState extends State<ViewProfile> {
     );
   }
 
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   getProfileWidget() {
     return Column(
       children: <Widget>[
@@ -85,7 +94,10 @@ class _ViewProfileState extends State<ViewProfile> {
                         Icon(Icons.call),
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: () => setState(() {
+                      
+                      _makePhoneCall('tel:$model.mobile');
+                    }),
                   ),
                 ),
                 Container(
