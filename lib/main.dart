@@ -134,17 +134,6 @@ class _MyAppNewState extends State<MyAppNew> {
   @override
   void initState() {
     super.initState();
-    _listenForPermissionStatus();
-  }
-
-  void _listenForPermissionStatus() async {
-    var status = await Permission.contacts.status;
-    if (status.isGranted) {
-      print("status is granted ");
-    } else {
-      print("request  contacts ");
-      await Permission.contacts.request();
-    }
   }
 
   @override

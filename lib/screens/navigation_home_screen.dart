@@ -10,6 +10,7 @@ import 'package:flutterapp/screens/help_screen.dart';
 import 'package:flutterapp/screens/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/screens/relation_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -68,12 +69,16 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
                     )),
 
           bottomNavigationBar: AnimatedBottomNav(
-              currentIndex: currentPage,
-              onChange: (index) {
-                setState(() {
-                  currentPage = index;
-                });
-              }),
+            currentIndex: currentPage,
+            onChange: (index) {
+              if (index == 1) {
+                _listenForPermissionStatus();
+              }
+              setState(() {
+                currentPage = index;
+              });
+            },
+          ),
 
           // bottomNavigationBar: FancyBottomNavigation(
           //   tabs: [
@@ -107,6 +112,33 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         ),
       ),
     );
+  }
+
+  void _listenForPermissionStatus() async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      print("status is granted ");
+    } else {
+      AlertDialog alert = AlertDialog(
+        title: Text("Contact Permissino Required"),
+        content: Text('We need Contact permission to show contact list '),
+        actions: [
+          FlatButton(
+            child: Text("OK"),
+            onPressed: () {
+              Permission.contacts.request();
+            },
+          )
+        ],
+      );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
   }
 
   void changeIndex(DrawerIndex drawerIndexdata) {
