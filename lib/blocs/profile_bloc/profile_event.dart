@@ -21,3 +21,5 @@ class SaveProfileEvent extends ProfileEvent {
   @override
   List<Object> get props => [model];
 }
+
+class GetUserDetails extends ProfileEvent {}

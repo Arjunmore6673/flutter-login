@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/profile_bloc/profile_event.dart';
 import 'package:flutterapp/blocs/profile_bloc/profile_state.dart';
+import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
@@ -22,6 +23,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
     if (event is SaveProfileEvent) {
       yield Loading();
+      await userRepository.updateUserDeatils(event.model);
+      yield SavedProfile();
+      try {} catch (e) {
+        yield SaveError(error: e);
+      }
+    }
+
+    if (event is GetUserDetails) {
+      RelationModel user = await userRepository.getUserDetails();
+      yield UserRetrivedDetails(model: user);
     }
   }
 }

@@ -75,3 +75,20 @@
         }
     ]
 }
+
+
+
+
+// {
+//     "id": 1,
+//     "url": "2222",
+//     "email": "rock@gmail.com",
+//     "mobile": "83292578",
+//     "name": "Arjun more",
+//     "gender": "MALE",
+//     "dob": "2012-09-14",
+//     "address": "sangavi pune ",
+//     "status":"ACTIVE"
+// }
+// {{api}}api/secured/update_user
+

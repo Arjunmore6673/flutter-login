@@ -49,3 +49,10 @@ class RelationStoredState extends RelationState {
   @override
   List<Object> get props => [model];
 }
+
+class UserRetrivedDetails extends RelationState {
+  final RelationModel model;
+  const UserRetrivedDetails({@required this.model});
+  @override
+  List<Object> get props => [model];
+}

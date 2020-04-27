@@ -176,7 +176,8 @@ class _MyAppNewState extends State<MyAppNew> {
               //return RelationScreen();
               //return LoginPage(userRepository: userRepository);
             //  return MyHomePage();
-              return  LoginPage(userRepository: userRepository);
+             //  return LoginPage(userRepository: userRepository);
+            return  Profile();
               // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {

@@ -185,9 +185,11 @@ class UserRepository {
     await prefs.setString(Constants.USER_NAME, da.getName);
     await prefs.setString(Constants.USER_MOBILE, da.getMobile);
     await prefs.setString(Constants.USER_EMAIL, da.getEmail);
-    await prefs.setString(Constants.USER_GENDER, da.gender);
+    await prefs.setString(Constants.USER_GENDER, da.getGender);
     await prefs.setString(Constants.USER_RELATION, da.getRelation);
     await prefs.setString(Constants.USER_IMAGE, da.getImage);
+    await prefs.setString(Constants.USER_ADDRESS, da.getAddress);
+    await prefs.setString(Constants.USER_DOB, da.dob);
   }
 
   getUserDetails() async {
@@ -200,6 +202,8 @@ class UserRepository {
       prefs.getString(Constants.USER_GENDER),
       prefs.getString(Constants.USER_RELATION),
       prefs.getString(Constants.USER_IMAGE),
+      prefs.getString(Constants.USER_ADDRESS),
+      prefs.getString(Constants.USER_DOB),
     );
   }
 
@@ -270,7 +274,7 @@ class UserRepository {
     }
   }
 
-  Future<String> updateUserDetails(RemovedContact model) async {
+  Future<void> updateUserDeatils(RelationModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.TOKEN);
     var id = prefs.getInt(Constants.USER_ID);
@@ -279,12 +283,23 @@ class UserRepository {
       "Authorization": "Token " + token
     };
     Response response = await http.put(
-      Constants.BASE_URL + "/api/secured/update_user_image",
+      Constants.BASE_URL + "/api/secured/update_user",
       headers: headers,
-      body: json.encode({"url": "", "userId": id}),
+      body: json.encode({
+        "id": id,
+        "image": model.image,
+        "name": model.name,
+        "address": model.address,
+        "dob": model.dob,
+        "gender": model.gender,
+        "email": model.email,
+        "mobile": model.mobile,
+      }),
     );
     final res = json.decode(response.body);
     final userData = res["data"];
+    final data = RelationModel.fromJson(userData);
+    _saveUserData(data);
     print("successfully updated" + userData.toString());
   }
 }

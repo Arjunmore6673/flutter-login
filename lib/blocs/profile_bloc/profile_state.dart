@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutterapp/model/relation_model.dart';
 
 class ProfileState extends Equatable {
   @override
@@ -30,4 +31,11 @@ class UploadError extends ProfileState {
   UploadError({this.error});
   @override
   List<Object> get props => [error];
+}
+
+class UserRetrivedDetails extends ProfileState {
+  final RelationModel model;
+  UserRetrivedDetails({this.model});
+  @override
+  List<Object> get props => [model];
 }
