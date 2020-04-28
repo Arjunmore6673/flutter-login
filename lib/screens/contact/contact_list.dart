@@ -1,7 +1,7 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutterapp/screens/searched_contacts.dart';
+import 'package:flutterapp/screens/contact/searched_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

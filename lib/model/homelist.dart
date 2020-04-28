@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutterapp/screens/register_screen.dart';
+import 'package:flutterapp/screens/login/register_screen.dart';
 
 class HomeList {
   HomeList({

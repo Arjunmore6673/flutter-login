@@ -5,10 +5,10 @@ import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
-import 'package:flutterapp/screens/view_profile.dart';
+import 'package:flutterapp/screens/relation/view_profile.dart';
 
-import 'common/ExpandableCardCommon.dart';
-import 'common/ProfileImgAndDetailsCommon.dart';
+import '../common/ExpandableCardCommon.dart';
+import '../common/ProfileImgAndDetailsCommon.dart';
 
 class RelationScreen extends StatefulWidget {
   RelationScreen({Key key}) : super(key: key);

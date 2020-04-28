@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/loading.dart';
-import 'package:flutterapp/screens/login_page.dart';
-import 'package:flutterapp/screens/navigation_home_screen.dart';
+import 'package:flutterapp/screens/login/login_page.dart';
+import 'package:flutterapp/screens/drawer_screens/navigation_home_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
 
 import 'blocs/auth_bloc/auth_bloc.dart';

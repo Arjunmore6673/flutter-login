@@ -3,13 +3,13 @@ import 'package:flutterapp/app_theme.dart';
 import 'package:flutterapp/custom_drawer/drawer_user_controller.dart';
 import 'package:flutterapp/custom_drawer/home_drawer.dart';
 import 'package:flutterapp/main.dart';
-import 'package:flutterapp/screens/about_us.dart';
-import 'package:flutterapp/screens/contact_list.dart';
-import 'package:flutterapp/screens/feedback_screen.dart';
-import 'package:flutterapp/screens/help_screen.dart';
-import 'package:flutterapp/screens/invite_friend_screen.dart';
+import 'package:flutterapp/screens/drawer_screens/about_us.dart';
+import 'package:flutterapp/screens/contact/contact_list.dart';
+import 'package:flutterapp/screens/drawer_screens/feedback_screen.dart';
+import 'package:flutterapp/screens/drawer_screens/help_screen.dart';
+import 'package:flutterapp/screens/drawer_screens/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterapp/screens/relation_screen.dart';
+import 'package:flutterapp/screens/relation/relation_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
