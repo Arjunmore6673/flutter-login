@@ -1,18 +1,14 @@
 import 'dart:io';
-import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/repository/user_repo.dart';
-import 'package:flutterapp/screens/home_screen.dart';
 import 'package:flutterapp/screens/loading.dart';
 import 'package:flutterapp/screens/login_page.dart';
 import 'package:flutterapp/screens/navigation_home_screen.dart';
-import 'package:flutterapp/screens/profile_edit.dart';
-import 'package:flutterapp/screens/register_screen.dart';
-import 'package:flutterapp/screens/relation_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'blocs/auth_bloc/auth_bloc.dart';
 import 'blocs/auth_bloc/auth_event.dart';
 import 'blocs/auth_bloc/auth_state.dart';

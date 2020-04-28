@@ -7,6 +7,8 @@ import 'package:flutterapp/blocs/bloc_login/login_state.dart';
 import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
 import 'package:flutterapp/screens/common/CommonIconButton.dart';
 import 'package:flutterapp/screens/common/navigator.dart';
+import 'package:flutterapp/screens/navigation_home_screen.dart';
+import 'package:flutterapp/screens/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -56,6 +58,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             );
           }
+          if (state is AuthenticationAuthenticated) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NavigationHomeScreen()));
+          }
         },
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
@@ -103,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onSaved: (String value) {}),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top:20),
+                    margin: EdgeInsets.only(top: 20),
                     width: screenSize.width,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +130,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         CommonIconButton(
                           buttonText: "Register",
                           onTap: () {
-                            Nevigator.navigateRegisterPage(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterScreen()),
+                            );
                           },
                           color: Colors.white,
                         ),

@@ -21,4 +21,14 @@ class RegistrationModel {
     map["address"] = address;
     return map;
   }
+
+
+
+
+  @override
+  String toString() {
+    return 'RegistrationModel{name: $name, mobile: $mobile, password: $password, gender: $gender, dob: $dob, address: $address}';
+  }
+
+
 }

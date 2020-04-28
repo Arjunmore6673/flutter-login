@@ -1,24 +1,34 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterapp/blocs/registration_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/blocs/registration_bloc/register_bloc.dart';
+import 'package:flutterapp/blocs/registration_bloc/register_event.dart';
+import 'package:flutterapp/blocs/registration_bloc/register_state.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/common/navigator.dart';
 import 'package:flutterapp/screens/login_page.dart';
-import 'package:flutterapp/util/constants.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() {
-    return RegisterScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (BuildContext context) =>
+          RegistrationBloc(userRepository: UserRepository()),
+      child: RegisterForm(context),
+    );
   }
 }
 
-class RegisterScreenState extends State<RegisterScreen> {
+class RegisterForm extends StatefulWidget {
+ final  BuildContext contextScreen;
+  RegisterForm(this.contextScreen);
+
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
   final formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -27,103 +37,126 @@ class RegisterScreenState extends State<RegisterScreen> {
   final _addressController = TextEditingController();
   final _mobileNoController = TextEditingController();
   String radioItem = '';
-  Map<String, String> headers = {
-    "Content-type": "application/json",
-    "Authorization":
-        "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
-  };
+  RegistrationBloc _registerBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _registerBloc = BlocProvider.of<RegistrationBloc>(context);
+  }
 
   saveRegistration(RegistrationModel model, BuildContext context) async {
-    Response response = await http.post(
-      Constants.BASE_URL + "/auth/register",
-      headers: headers,
-      body: json.encode(model.toMap()),
-    );
-    final res = json.decode(response.body);
-    final userData = res["data"];
-    print("success" + userData.toString());
     Nevigator.navigateToLoginPage(context);
-    showError("Registered successfully");
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: registrationBloc.registrationResponse,
-      builder: (context, AsyncSnapshot<int> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data == 200) {
-            return LoginPage(
-              userRepository: UserRepository(),
-            );
-          } else {
-            return Text("som  ething fuckied ");
-          }
-        }
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Form(
-                key: formKey, 
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      name(),
-                      emailField(),
-                      village(),
-                      gender(),
-                      mobile(),
-                      passwordField(),
-                      passwordField2(),
-                      raisedButton(),
-                    ],
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
+      body: SingleChildScrollView(
+        child: BlocListener<RegistrationBloc, RegisterState>(
+          /// listener to listen failure events
+          listener: (contextListener, state) {
+            if (state is RegistrationSuccessfully) {
+              AlertDialog alert = AlertDialog(
+                title: Text("Registration"),
+                content: Text('Registration done Successfully'),
+                actions: [
+                  FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.pop(widget.contextScreen);
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                },
+              );
+            }
+            if (state is RegistrationError) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Registration Failed"),
+                  content: Text("SOmething Went WRong..Try again Later"),
                 ),
+              );
+            }
+          },
+
+          child: Form(
+            key: formKey,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  name(),
+                  emailField(),
+                  village(),
+                  gender(),
+                  mobile(),
+                  passwordField(),
+                  passwordField2(),
+                  Padding(
+                    padding: EdgeInsets.all(6.0),
+                    child: RaisedButton(
+                      elevation: 8,
+                      child: Text("Register"),
+                      color: Colors.white,
+                      onPressed: () {
+                        String msg = validateAndRegisterUser();
+                        if (msg != "success") {
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(msg),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {}
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
   Widget name() {
-    return StreamBuilder(
-      builder: (context, snapshot) {
-        return TextFormField(
-          controller: _nameController,
-          decoration: InputDecoration(
-            labelText: "Full name",
-            errorText: snapshot.error,
-          ),
-          keyboardType: TextInputType.text,
-        );
-      },
+    return TextFormField(
+      controller: _nameController,
+      decoration: InputDecoration(
+        labelText: "Full name",
+      ),
     );
   }
 
   Widget emailField() {
-    return StreamBuilder(
-      builder: (context, snapshot) {
-        return TextFormField(
-          controller: _emailController,
-          decoration: InputDecoration(
-            labelText: "Email address",
-            hintText: "rockajm@gmail.com",
-            errorText: snapshot.error,
-          ),
-          validator: (value) {
-            if (!value.contains('@'))
-              return "Please enter email";
-            else
-              return null;
-          },
-          keyboardType: TextInputType.emailAddress,
-        );
+    return TextFormField(
+      controller: _emailController,
+      decoration: InputDecoration(
+        labelText: "Email address",
+        hintText: "rockajm@gmail.com",
+      ),
+      validator: (value) {
+        if (!value.contains('@'))
+          return "Please enter email";
+        else
+          return null;
       },
+      keyboardType: TextInputType.emailAddress,
     );
   }
 
@@ -192,90 +225,55 @@ class RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget village() {
-    return StreamBuilder(
-      builder: (context, snapshot) {
-        return TextFormField(
-          controller: _addressController,
-          decoration: InputDecoration(
-            labelText: "State, city, village",
-            errorText: snapshot.error,
-          ),
-          keyboardType: TextInputType.text,
-        );
-      },
+    return TextFormField(
+      controller: _addressController,
+      decoration: InputDecoration(
+        labelText: "State, city, village",
+      ),
+      keyboardType: TextInputType.text,
     );
   }
 
   Widget mobile() {
-    return StreamBuilder(
-      builder: (context, snapshot) {
-        return TextFormField(
-          controller: _mobileNoController,
-          decoration: InputDecoration(
-            labelText: "Mobile number",
-            errorText: snapshot.error,
-          ),
-          keyboardType: TextInputType.phone,
-        );
-      },
-    );
-  }
-
-  Widget raisedButton() {
-    return Padding(
-      padding: EdgeInsets.all(6.0),
-      child: RaisedButton(
-        elevation: 8,
-        child: Text("Register"),
-        color: Colors.white,
-        onPressed: validateAndRegisterUser,
+    return TextFormField(
+      controller: _mobileNoController,
+      decoration: InputDecoration(
+        labelText: "Mobile number",
       ),
+      keyboardType: TextInputType.phone,
     );
   }
 
-  showError(String error) {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Text(error),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
-
-  validateAndRegisterUser() {
+  String validateAndRegisterUser() {
     if (_nameController.text.length <= 0) {
-      showError("Please enter full name");
-      return;
+      return "Please enter full name";
     }
     if (_passwordController.text != _passwordController2.text) {
-      showError("password not matching");
-      return;
+      return "password not matching";
     }
     if (_addressController.text.length <= 0) {
-      showError("Please add address");
-      return;
+      return "Please add address";
     }
     if (_mobileNoController.text.length <= 0) {
-      showError("Please enter mobile number");
-      return;
+      return "Please enter mobile number";
     }
     if (radioItem == '') {
-      showError("Please select gender");
-      return;
+      return "Please select gender";
     }
 
-    {
-      saveRegistration(
-          new RegistrationModel(
-            _nameController.text,
-            _mobileNoController.text,
-            _emailController.text,
-            _passwordController.text,
-            radioItem,
-            "1996-01-15",
-            _addressController.text,
-          ),
-          context);
-    }
+    _registerBloc.add(
+      RegisterButtonPressed(
+        model: new RegistrationModel(
+          _nameController.value.text,
+          _mobileNoController.value.text,
+          _emailController.value.text,
+          _passwordController.value.text,
+          radioItem,
+          "1996-01-15",
+          _addressController.value.text,
+        ),
+      ),
+    );
+    return "success";
   }
 }

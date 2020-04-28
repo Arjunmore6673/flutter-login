@@ -1,20 +1,19 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutterapp/blocs/contact_bloc/contact_event.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
+import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/util/constants.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
+import 'package:path/path.dart' as Path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutterapp/model/relation_model.dart';
-import 'package:http/http.dart';
-import 'package:meta/meta.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'package:path/path.dart' as Path;
-
-import 'dart:convert';
 
 class UserRepository {
   //final baseUrl = "https://natigunta6673.herokuapp.com"; //
@@ -25,17 +24,42 @@ class UserRepository {
         "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
   };
 
-  Future<int> saveRegistration(RegistrationModel model) async {
+  Future<String> saveRegistration(RegistrationModel model) async {
+    // await Future.delayed(Duration(seconds: 1));
+    try {
+      Response response = await http.post(
+        Constants.BASE_URL + "/auth/register",
+        headers: headers,
+        body: json.encode(model.toMap()),
+      );
+      final res = json.decode(response.body);
+      final userData = res["data"];
+      print("success" + userData.toString());
+      return userData.toString();
+    } catch (e) {
+      print(e);
+      return e;
+    }
+  }
+
+  Future<String> registerUser(RegistrationModel model) async {
     // await Future.delayed(Duration(seconds: 1));
     Response response = await http.post(
       Constants.BASE_URL + "/auth/register",
       headers: headers,
-      body: json.encode(model.toMap()),
+      body: json.encode({
+        "email": model.email,
+        "mobile": model.mobile,
+        "password": model.password,
+        "name": model.name,
+        "gender": model.gender,
+        "dob": "2012-09-15",
+        "address": model.address
+      }),
     );
     final res = json.decode(response.body);
     final userData = res["data"];
-    print("success" + userData.toString());
-    return 1;
+    return userData.toString();
   }
 
   Future<String> authenticate({
