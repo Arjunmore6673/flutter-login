@@ -1,6 +1,7 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/screens/contact/searched_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -253,7 +254,7 @@ class _ContactListPageState extends State<ContactListPage>
                 //     },
                 //   )
                 : Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressCommon(),
                   ),
           ),
         ],

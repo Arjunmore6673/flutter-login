@@ -1,14 +1,13 @@
-import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutterapp/app_theme.dart';
 import 'package:flutterapp/custom_drawer/drawer_user_controller.dart';
 import 'package:flutterapp/custom_drawer/home_drawer.dart';
 import 'package:flutterapp/main.dart';
-import 'package:flutterapp/screens/drawer_screens/about_us.dart';
 import 'package:flutterapp/screens/contact/contact_list.dart';
+import 'package:flutterapp/screens/drawer_screens/about_us.dart';
 import 'package:flutterapp/screens/drawer_screens/feedback_screen.dart';
 import 'package:flutterapp/screens/drawer_screens/help_screen.dart';
 import 'package:flutterapp/screens/drawer_screens/invite_friend_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutterapp/screens/relation/relation_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -174,25 +173,27 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     }
   }
 
-  // _getPage(int page) {
-  //   switch (page) {
-  //     case 0:
-  //       screenView = RelationScreen();
-  //       return RelationScreen();
-  //     case 1:
-  //       screenView = ContactListPage();
-  //       return ContactListPage();
-  //     default:
-  //       return ContactListPage();
-  //   }
-  // }
+// _getPage(int page) {
+//   switch (page) {
+//     case 0:
+//       screenView = RelationScreen();
+//       return RelationScreen();
+//     case 1:
+//       screenView = ContactListPage();
+//       return ContactListPage();
+//     default:
+//       return ContactListPage();
+//   }
+// }
 }
 
 class AnimatedBottomNav extends StatelessWidget {
   final int currentIndex;
   final Function(int) onChange;
+
   const AnimatedBottomNav({Key key, this.currentIndex, this.onChange})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -232,6 +233,7 @@ class BottomNavItem extends StatelessWidget {
   final Color activeColor;
   final Color inactiveColor;
   final String title;
+
   const BottomNavItem(
       {Key key,
       this.isActive = false,
@@ -240,6 +242,7 @@ class BottomNavItem extends StatelessWidget {
       this.inactiveColor,
       this.title})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(

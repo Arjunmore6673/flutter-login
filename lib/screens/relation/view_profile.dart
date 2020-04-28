@@ -10,6 +10,7 @@ import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
 import 'package:flutterapp/screens/common/ProfileImgAndDetailsCommon.dart';
 import 'package:flutterapp/screens/common/TextCommon.dart';
+import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/util/constants.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
@@ -133,7 +134,7 @@ class _ViewProfileState extends State<ViewProfile> {
         //   child: BlocBuilder<RelationBloc, RelationState>(
         //     builder: (context, state) {
         //       if (state is RelationLoadingState) {
-        //         return Center(child: CircularProgressIndicator());
+        //         return Center(child: CircularProgressCommon());
         //       }
         //       if (state is RelationLoadFailureState) {
         //         return Text("error..");
@@ -186,7 +187,7 @@ class _ViewProfileState extends State<ViewProfile> {
                     ),
                   ),
                 ),
-                isLoading ? CircularProgressIndicator() : SizedBox()
+                isLoading ? CircularProgressCommon() : SizedBox()
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_bloc.dart';
 import 'package:flutterapp/blocs/bloc_login/login_event.dart';
 import 'package:flutterapp/blocs/bloc_login/login_state.dart';
+import 'package:flutterapp/screens/common/loading.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -56,7 +57,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 Container(
                   child: state is LoginLoading
-                      ? CircularProgressIndicator()
+                      ? CircularProgressCommon()
                       : null,
                 ),
               ],

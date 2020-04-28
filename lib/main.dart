@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/repository/user_repo.dart';
-import 'package:flutterapp/screens/loading.dart';
+import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/screens/login/login_page.dart';
 import 'package:flutterapp/screens/drawer_screens/navigation_home_screen.dart';
 import 'package:flutterapp/screens/splash_screen.dart';
@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
                 //    return NavigationHomeScreen();
               }
               if (state is AuthenticationLoading) {
-                return LoadingIndicator();
+                return CircularProgressCommon();
               }
               return Text("something wrong");
             },
@@ -171,7 +171,7 @@ class _MyAppNewState extends State<MyAppNew> {
               return LoginPage(userRepository: userRepository);
             }
             if (state is AuthenticationLoading) {
-              return LoadingIndicator();
+              return CircularProgressCommon();
             }
             return Text("something wrong");
           },

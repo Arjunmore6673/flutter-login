@@ -5,6 +5,7 @@ import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/repository/user_repo.dart';
+import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/screens/relation/view_profile.dart';
 
 import '../common/ExpandableCardCommon.dart';
@@ -60,7 +61,7 @@ class Page extends StatelessWidget {
                   return Text("EMPTY");
                 }
                 if (state is RelationLoadingState) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressCommon());
                 }
                 if (state is RelationLoadFailureState) {
                   return Text("error..");

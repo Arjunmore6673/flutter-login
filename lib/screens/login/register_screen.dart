@@ -7,7 +7,6 @@ import 'package:flutterapp/blocs/registration_bloc/register_state.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
 import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/common/navigator.dart';
-import 'package:flutterapp/screens/login/login_page.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -21,7 +20,8 @@ class RegisterScreen extends StatelessWidget {
 }
 
 class RegisterForm extends StatefulWidget {
- final  BuildContext contextScreen;
+  final BuildContext contextScreen;
+
   RegisterForm(this.contextScreen);
 
   @override

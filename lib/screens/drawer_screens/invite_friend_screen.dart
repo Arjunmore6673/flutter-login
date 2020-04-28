@@ -1,5 +1,5 @@
-import 'package:flutterapp/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/app_theme.dart';
 
 class InviteFriend extends StatefulWidget {
   @override

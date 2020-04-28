@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutterapp/blocs/contact_bloc/contact_event.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/util/constants.dart';
@@ -23,24 +22,6 @@ class UserRepository {
     "Authorization":
         "Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJyb2NrYWptQGdtYWlsLmNvbSIsImlkIjoiMSIsInN0YXR1cyI6IkFDVElWRSJ9.GU5IBNjd2Ry57h7Ywr9ZacVNlCFFAKJcedpsP0KIgMtHc51-OOgOIIada_u5UVAtElrs_0DPnF1YtQcxaPzsNg"
   };
-
-  Future<String> saveRegistration(RegistrationModel model) async {
-    // await Future.delayed(Duration(seconds: 1));
-    try {
-      Response response = await http.post(
-        Constants.BASE_URL + "/auth/register",
-        headers: headers,
-        body: json.encode(model.toMap()),
-      );
-      final res = json.decode(response.body);
-      final userData = res["data"];
-      print("success" + userData.toString());
-      return userData.toString();
-    } catch (e) {
-      print(e);
-      return e;
-    }
-  }
 
   Future<String> registerUser(RegistrationModel model) async {
     // await Future.delayed(Duration(seconds: 1));

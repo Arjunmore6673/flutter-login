@@ -1,8 +1,10 @@
 import 'dart:io';
-import 'package:path/path.dart' as Path;
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/screens/common/loading.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 class MyHomePageNew extends StatefulWidget {
   MyHomePageNew({Key key, this.title}) : super(key: key);
@@ -23,10 +25,10 @@ class MyHomePageNew extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePageNew> {
-  int _counter = 0;
   File _image;
   String _uploadedFileURL;
   bool isLoading = false;
+
   Future chooseFile() async {
     await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
       setState(() {
@@ -62,7 +64,6 @@ class _MyHomePageState extends State<MyHomePageNew> {
     await firebaseStorageRef.delete();
     print("DElted successfully");
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,7 @@ class _MyHomePageState extends State<MyHomePageNew> {
             ),
             _image != null
                 ? isLoading
-                    ? CircularProgressIndicator()
+                    ? CircularProgressCommon()
                     : RaisedButton(
                         child: Text('Upload Image'),
                         onPressed: uploadFile,
