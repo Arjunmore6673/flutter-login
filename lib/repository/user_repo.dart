@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
@@ -25,6 +26,12 @@ class UserRepository {
 
   Future<String> registerUser(RegistrationModel model) async {
     // await Future.delayed(Duration(seconds: 1));
+    String uid = await createFirebaseUIDforUser(model);
+    print(uid);
+    if (uid == "") {
+      print("nulll id firebase");
+      return null;
+    }
     Response response = await http.post(
       Constants.BASE_URL + "/auth/register",
       headers: headers,
@@ -35,12 +42,35 @@ class UserRepository {
         "name": model.name,
         "gender": model.gender,
         "dob": "2012-09-15",
-        "address": model.address
+        "address": model.address,
+        "firebaseId": uid
       }),
     );
     final res = json.decode(response.body);
     final userData = res["data"];
+
     return userData.toString();
+  }
+
+  Future<String> createFirebaseUIDforUser(RegistrationModel model) async {
+    var ref = Firestore.instance.collection('users').document();
+    var idBefore = ref.documentID;
+    print(idBefore); // prints the unique id
+    String result = "";
+    await ref.setData({
+      'nickname': model.name,
+      'photoUrl':
+          "https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      'id': idBefore,
+      'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+      'chattingWith': null
+    }).then((_) {
+      result = idBefore;
+    }).catchError((onError) {
+      print("FAILed " + onError.toString());
+      result = "";
+    });
+    return result;
   }
 
   Future<String> authenticate({
@@ -56,7 +86,9 @@ class UserRepository {
     final res = json.decode(response.body);
     final userData = res["user"];
     final da = RelationModel.fromJson(userData);
-    _saveUserData(da);
+    print("------------");
+    print(res.toString());
+    await _saveUserData(da);
     final token = res["token"];
     return token;
   }
@@ -195,6 +227,7 @@ class UserRepository {
     await prefs.setString(Constants.USER_IMAGE, da.getImage);
     await prefs.setString(Constants.USER_ADDRESS, da.getAddress);
     await prefs.setString(Constants.USER_DOB, da.dob);
+    await prefs.setString(Constants.USER_FIREBASE_ID, da.firebaseId);
   }
 
   getUserDetails() async {
@@ -209,6 +242,7 @@ class UserRepository {
       prefs.getString(Constants.USER_IMAGE),
       prefs.getString(Constants.USER_ADDRESS),
       prefs.getString(Constants.USER_DOB),
+      prefs.getString(Constants.USER_FIREBASE_ID),
     );
   }
 

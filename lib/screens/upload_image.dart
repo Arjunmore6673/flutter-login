@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePageNew> {
 
   Future<void> deleteImage() async {
     var fileUrl = Uri.decodeFull(Path.basename(
-            "https://firebasestorage.googleapis.com/v0/b/schoolmanage-42653.appspot.com/o/images%2Fstorage%2Femulated%2F0%2FDCIM%2FCamera%2FIMG_20200129_202511.jpg?alt=media&token=274c22d4-1102-418c-8a26-a0b1781e732c"))
+            "https://firebasestorage.googleapis.com/v0/b/flutterapp-42653.appspot.com/o/images%2Fstorage%2Femulated%2F0%2FDCIM%2FCamera%2FIMG_20200129_202511.jpg?alt=media&token=274c22d4-1102-418c-8a26-a0b1781e732c"))
         .replaceAll(new RegExp(r'(\?alt).*'), '');
     final StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child(fileUrl);

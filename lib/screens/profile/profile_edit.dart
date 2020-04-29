@@ -415,7 +415,8 @@ class MapScreenState extends State<ProfilePage>
                           "",
                           downloadUrl,
                           _addressController.value.text,
-                          modelMy.dob);
+                          modelMy.dob,
+                          modelMy.firebaseId);
                       _profileBloc.add(SaveProfileEvent(model));
 
                       setState(() {

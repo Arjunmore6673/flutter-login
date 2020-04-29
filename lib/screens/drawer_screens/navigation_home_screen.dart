@@ -3,6 +3,7 @@ import 'package:flutterapp/app_theme.dart';
 import 'package:flutterapp/custom_drawer/drawer_user_controller.dart';
 import 'package:flutterapp/custom_drawer/home_drawer.dart';
 import 'package:flutterapp/main.dart';
+import 'package:flutterapp/screens/chat/chat_screen.dart';
 import 'package:flutterapp/screens/contact/contact_list.dart';
 import 'package:flutterapp/screens/drawer_screens/about_us.dart';
 import 'package:flutterapp/screens/drawer_screens/feedback_screen.dart';
@@ -36,7 +37,8 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       HelpScreen(),
       FeedbackScreen(),
       InviteFriend(),
-      AboutUs()
+      AboutUs(),
+      ChatScreen()
     ];
     drawerIndex = DrawerIndex.HOME;
     screenView = relationScreen;
@@ -215,9 +217,19 @@ class AnimatedBottomNav extends StatelessWidget {
             child: InkWell(
               onTap: () => onChange(1),
               child: BottomNavItem(
-                icon: Icons.verified_user,
+                icon: Icons.people,
                 title: "Contacts",
                 isActive: currentIndex == 1,
+              ),
+            ),
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () => onChange(6),
+              child: BottomNavItem(
+                icon: Icons.chat,
+                title: "Chat",
+                isActive: currentIndex == 6,
               ),
             ),
           ),
