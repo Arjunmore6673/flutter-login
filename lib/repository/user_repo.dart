@@ -25,8 +25,9 @@ class UserRepository {
   };
 
   Future<String> registerUser(RegistrationModel model) async {
+    // RegistrationModel model  = new RegistrationModel("ARJUN", "31311331", "rock@gmail.com", "12345", "MALE", "15/01/1196", "pUNE");
     // await Future.delayed(Duration(seconds: 1));
-    String uid = await createFirebaseUIDforUser(model);
+    String uid = await createFirebaseUIDforUser(model.name);
     print(uid);
     if (uid == "") {
       print("nulll id firebase");
@@ -52,15 +53,13 @@ class UserRepository {
     return userData.toString();
   }
 
-  Future<String> createFirebaseUIDforUser(RegistrationModel model) async {
+  Future<String> createFirebaseUIDforUser(String name) async {
     var ref = Firestore.instance.collection('users').document();
     var idBefore = ref.documentID;
     print(idBefore); // prints the unique id
     String result = "";
     await ref.setData({
-      'nickname': model.name,
-      'photoUrl':
-          "https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      'nickname': name,
       'id': idBefore,
       'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
       'chattingWith': null
@@ -109,6 +108,8 @@ class UserRepository {
       "Content-type": "application/json",
       "Authorization": "Token " + token
     };
+    //uid Firebase
+    String uid = await createFirebaseUIDforUser(name);
 
     String output = mobile.replaceAll(' ', '');
     String outputRemovedDash = output.replaceAll('-', '');
@@ -126,7 +127,9 @@ class UserRepository {
             "gender": gender,
             "image": image,
             "email": '',
-            "city": address
+            "city": address,
+            "firebaseId":uid,
+            "status":"ADDED"
           },
           "relation": relation,
         },

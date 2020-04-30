@@ -498,17 +498,17 @@ class ChatScreenState extends State<ChatScreen> {
             ),
             color: Colors.white,
           ),
-          Material(
-            child: new Container(
-              margin: new EdgeInsets.symmetric(horizontal: 1.0),
-              child: new IconButton(
-                icon: new Icon(Icons.face),
-                onPressed: getSticker,
-                color: primaryColor,
-              ),
-            ),
-            color: Colors.white,
-          ),
+          // Material(
+          //   child: new Container(
+          //     margin: new EdgeInsets.symmetric(horizontal: 1.0),
+          //     child: new IconButton(
+          //       icon: new Icon(Icons.face),
+          //       onPressed: getSticker,
+          //       color: primaryColor,
+          //     ),
+          //   ),
+          //   color: Colors.white,
+          // ),
 
           // Edit text
           Flexible(

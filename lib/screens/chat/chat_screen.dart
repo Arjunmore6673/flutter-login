@@ -7,8 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
+import 'package:flutterapp/model/relation_model.dart';
+import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/chat/chat.dart';
 import 'package:flutterapp/screens/chat/const.dart';
 import 'package:flutterapp/screens/chat/settings.dart';
@@ -17,15 +23,29 @@ import 'package:flutterapp/util/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ChatScreen extends StatefulWidget {
-  ChatScreen({Key key}) : super(key: key);
-
+class ChatListPage extends StatelessWidget {
   @override
-  State createState() => MainScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (BuildContext context) => RelationBloc(
+        UserRepository(),
+      ),
+      child: ChatScreen(),
+    );
+  }
 }
 
-class MainScreenState extends State<ChatScreen> {
-  MainScreenState({Key key});
+/// chat screen
+
+class ChatScreen extends StatefulWidget {
+  ChatScreen({Key key}) : super(key: key);
+  @override
+  State createState() => ChatScreenState();
+}
+
+class ChatScreenState extends State<ChatScreen> {
+  ChatScreenState({Key key});
+  RelationBloc relationBloc;
 
   String currentUserId;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -33,16 +53,14 @@ class MainScreenState extends State<ChatScreen> {
       FlutterLocalNotificationsPlugin();
 
   bool isLoading = false;
-  List<Choice> choices = const <Choice>[
-    const Choice(title: 'Settings', icon: Icons.settings),
-    const Choice(title: 'Log out', icon: Icons.exit_to_app),
-  ];
 
   @override
   void initState() {
     super.initState();
     getFirebaseId();
     registerNotification();
+    relationBloc = BlocProvider.of<RelationBloc>(context);
+    relationBloc.add(RelationListPressed(userId: -1));
     configLocalNotification();
   }
 
@@ -70,6 +88,7 @@ class MainScreenState extends State<ChatScreen> {
 
     firebaseMessaging.getToken().then((token) {
       print('token: $token');
+      print('currentUserId: $currentUserId');
       Firestore.instance
           .collection('users')
           .document(currentUserId)
@@ -239,88 +258,69 @@ class MainScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'MAIN',
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          PopupMenuButton<Choice>(
-            onSelected: onItemMenuPress,
-            itemBuilder: (BuildContext context) {
-              return choices.map((Choice choice) {
-                return PopupMenuItem<Choice>(
-                    value: choice,
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          choice.icon,
-                          color: primaryColor,
-                        ),
-                        Container(
-                          width: 10.0,
-                        ),
-                        Text(
-                          choice.title,
-                          style: TextStyle(color: primaryColor),
-                        ),
-                      ],
-                    ));
-              }).toList();
-            },
-          ),
-        ],
-      ),
-      body: WillPopScope(
-        child: Stack(
-          children: <Widget>[
-            // List
-            Container(
-              child: StreamBuilder(
-                stream: Firestore.instance.collection('users').snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-                      ),
-                    );
-                  } else {
-                    return ListView.builder(
-                      padding: EdgeInsets.all(10.0),
-                      itemBuilder: (context, index) =>
-                          buildItem(context, snapshot.data.documents[index]),
-                      itemCount: snapshot.data.documents.length,
-                    );
-                  }
-                },
-              ),
-            ),
+    return BlocBuilder<RelationBloc, RelationState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Container(
+            margin: EdgeInsets.only(top: 90),
+            child: WillPopScope(
+              child: Stack(
+                children: <Widget>[
+                  // List
+                  Container(
+                      child: state is RelationLoadedState
+                          ? getLIstView(state.data)
+                          : Center(
+                              child: CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(themeColor),
+                              ),
+                            )),
 
-            // Loading
-            Positioned(
-              child: isLoading
-                  ? Container(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(themeColor)),
-                      ),
-                      color: Colors.white.withOpacity(0.8),
-                    )
-                  : Container(),
-            )
-          ],
-        ),
-        onWillPop: onBackPress,
-      ),
+                  // Loading
+                  Positioned(
+                    child: isLoading
+                        ? Container(
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      themeColor)),
+                            ),
+                            color: Colors.white.withOpacity(0.8),
+                          )
+                        : Container(),
+                  )
+                ],
+              ),
+              onWillPop: onBackPress,
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget buildItem(BuildContext context, DocumentSnapshot document) {
-    if (document['id'] == currentUserId) {
+  Widget getLIstView(Map<String, Object> data) {
+    List<RelationModel> finalList = new List();
+    finalList.clear();
+    List<RelationModel> mamaMami = data["mamaMami"];
+    List<RelationModel> kakaMavshi = data["kakaMavshi"];
+    List<RelationModel> broSis = data["broSis"];
+    List<RelationModel> other = data["other"];
+    finalList.addAll(mamaMami);
+    finalList.addAll(kakaMavshi);
+    finalList.addAll(broSis);
+    finalList.addAll(other);
+    print("document============================>" + other.toString());
+    return ListView.builder(
+      padding: EdgeInsets.all(10.0),
+      itemBuilder: (context, index) => buildItem(context, finalList[index]),
+      itemCount: finalList.length,
+    );
+  }
+
+  Widget buildItem(BuildContext context, RelationModel document) {
+    if (document.firebaseId == currentUserId) {
       return Container();
     } else {
       return Container(
@@ -328,7 +328,7 @@ class MainScreenState extends State<ChatScreen> {
           child: Row(
             children: <Widget>[
               Material(
-                child: document['photoUrl'] != null
+                child: document.image != null
                     ? CachedNetworkImage(
                         placeholder: (context, url) => Container(
                           child: CircularProgressIndicator(
@@ -340,7 +340,7 @@ class MainScreenState extends State<ChatScreen> {
                           height: 50.0,
                           padding: EdgeInsets.all(15.0),
                         ),
-                        imageUrl: document['photoUrl'],
+                        imageUrl: document.image,
                         width: 50.0,
                         height: 50.0,
                         fit: BoxFit.cover,
@@ -359,7 +359,7 @@ class MainScreenState extends State<ChatScreen> {
                     children: <Widget>[
                       Container(
                         child: Text(
-                          'Nickname: ${document['nickname']}',
+                          'Nickname: ${document.name}',
                           style: TextStyle(color: primaryColor),
                         ),
                         alignment: Alignment.centerLeft,
@@ -367,7 +367,7 @@ class MainScreenState extends State<ChatScreen> {
                       ),
                       Container(
                         child: Text(
-                          'About me: ${document['aboutMe'] ?? 'Not available'}',
+                          'About me: ${document.email ?? 'Not available'}',
                           style: TextStyle(color: primaryColor),
                         ),
                         alignment: Alignment.centerLeft,
@@ -382,12 +382,16 @@ class MainScreenState extends State<ChatScreen> {
           ),
           onPressed: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Chat(
-                          peerId: document.documentID,
-                          peerAvatar: document['photoUrl'],
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => Chat(
+                  peerId: document.firebaseId,
+                  peerAvatar: document.image == null || document.image == ""
+                      ? "https://cdn.shopify.com/s/files/1/1061/1924/products/Smiling_Face_Emoji_large.png?v=1571606036"
+                      : document.image,
+                ),
+              ),
+            );
           },
           color: greyColor2,
           padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),

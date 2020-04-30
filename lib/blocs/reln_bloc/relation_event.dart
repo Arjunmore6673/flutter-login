@@ -58,3 +58,5 @@ class RelationStoreSinglePressed extends RelationEvents {
   @override
   List<Object> get props => [model];
 }
+
+class RelationGetOldData extends RelationEvents {}

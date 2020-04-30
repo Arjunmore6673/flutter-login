@@ -14,6 +14,7 @@ class RelationBloc extends Bloc<RelationEvents, RelationState> {
 
   @override
   Stream<RelationState> mapEventToState(RelationEvents event) async* {
+
     if (event is RelationListPressed) {
       try {
         yield RelationLoadingState();

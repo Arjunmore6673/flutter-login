@@ -38,7 +38,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       FeedbackScreen(),
       InviteFriend(),
       AboutUs(),
-      ChatScreen()
+      ChatListPage()
     ];
     drawerIndex = DrawerIndex.HOME;
     screenView = relationScreen;

@@ -96,7 +96,6 @@ class _ViewProfileState extends State<ViewProfile> {
                       ],
                     ),
                     onPressed: () => setState(() {
-                      
                       _makePhoneCall('tel:$model.mobile');
                     }),
                   ),
@@ -314,7 +313,8 @@ class UserInfo extends StatelessWidget {
                           ListTile(
                             leading: Icon(Icons.email),
                             title: Text("Email"),
-                            subtitle: Text(model.email),
+                            subtitle:
+                                Text(model.email != null ? model.email : ""),
                           ),
                           ListTile(
                             leading: Icon(Icons.phone),

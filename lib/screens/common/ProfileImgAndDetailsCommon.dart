@@ -27,7 +27,7 @@ class ProfileImgAndDetails extends StatelessWidget {
               : CircleAvatarCommon(url: userModel.image),
           CardCommon(
             child: UserDeatils(mainTitle: userModel.name, widgets: [
-              userModel.email.length > 0
+              userModel.email != null
                   ? Text(
                       userModel.email,
                       style: TextStyle(
