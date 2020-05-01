@@ -38,6 +38,7 @@ class _ViewProfileState extends State<ViewProfile> {
   void initState() {
     super.initState();
     model = widget.model;
+    print("INVIEW PROFILEE " + model.image);
     _uploadedFileURL = widget.model.image;
   }
 
@@ -49,7 +50,10 @@ class _ViewProfileState extends State<ViewProfile> {
           create: (BuildContext context) => RelationBloc(
             UserRepository(),
           )..add(RelationListPressed(userId: widget.model.id)),
-          child: getProfileWidget(),
+          child: Container(
+            margin: EdgeInsets.only(top: 89),
+            child: getProfileWidget(),
+          ),
         ),
       ),
     );
@@ -167,7 +171,6 @@ class _ViewProfileState extends State<ViewProfile> {
                             : 'assets/women.jpg'),
                       )
                     : CircleAvatarCommon(
-                        assetImage: true,
                         url: _uploadedFileURL,
                       ),
                 Positioned(

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,6 @@ import 'package:flutterapp/blocs/profile_bloc/profile_state.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
-import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
 import 'package:flutterapp/screens/common/loading.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,6 +40,8 @@ class _AddRelationState extends State<AddRelation> {
 
   @override
   void dispose() {
+    relationBloc.close();
+    profileBloc.close();
     super.dispose();
   }
 

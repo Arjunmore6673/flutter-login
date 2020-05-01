@@ -5,7 +5,6 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutterapp/blocs/profile_bloc/profile_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
 import 'package:flutterapp/repository/user_repo.dart';
-import 'package:flutterapp/screens/common/CardCommon.dart';
 import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/screens/contact/searched_contacts.dart';
 import 'package:flutterapp/screens/relation/add_relation_screen.dart';
@@ -221,85 +220,86 @@ class _ContactListPageState extends State<ContactListPage>
         foregroundColor: Colors.blue,
       ),
       body: SafeArea(
-          child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 50, left: 21, right: 20),
-            child: Container(
-              height: 50,
-              child: TextField(
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-                controller: editingController,
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
-                decoration: InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 50, left: 21, right: 20),
+              child: Container(
+                height: 50,
+                child: TextField(
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  controller: editingController,
+                  onChanged: (value) {
+                    filterSearchResults(value);
+                  },
+                  decoration: InputDecoration(
+                      labelText: "Search",
+                      hintText: "Search",
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
+                        ),
                       ),
-                    ),
-                    contentPadding: EdgeInsets.all(3)),
+                      contentPadding: EdgeInsets.all(3)),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: items != null
-                ? GridView.count(
-                    padding: EdgeInsets.all(14),
-                    childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height),
-                    crossAxisCount: 2,
-                    children: List.generate(
-                      items?.length ?? 0,
-                      (int index) {
-                        return AnimationConfiguration.staggeredGrid(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          columnCount: 2,
-                          child: ScaleAnimation(
-                            child: FadeInAnimation(
-                              child: SearchedContacts(
-                                relationBloc: widget.relationBloc,
-                                contact: items[index],
-                                onDelete: () => removeItem(index),
+            Expanded(
+              flex: 2,
+              child: items != null
+                  ? GridView.count(
+                      padding: EdgeInsets.all(14),
+                      childAspectRatio: MediaQuery.of(context).size.width /
+                          (MediaQuery.of(context).size.height),
+                      crossAxisCount: 2,
+                      children: List.generate(
+                        items?.length ?? 0,
+                        (int index) {
+                          return AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            columnCount: 2,
+                            child: ScaleAnimation(
+                              child: FadeInAnimation(
+                                child: SearchedContacts(
+                                  relationBloc: widget.relationBloc,
+                                  contact: items[index],
+                                  onDelete: () => removeItem(index),
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  )
+                          );
+                        },
+                      ),
+                    )
 
-                // ListView.builder(
-                //     itemCount: _contacts?.length ?? 0,
-                //     itemBuilder: (BuildContext context, int index) {
-                //       Contact c = _contacts?.elementAt(index);
-                //       return ListTile(
-                //         onTap: () {
-                //           Navigator.of(context).push(MaterialPageRoute(
-                //               builder: (BuildContext context) =>
-                //                   ContactDetailsPage(c)));
-                //         },
-                //         leading: (c.avatar != null && c.avatar.length > 0)
-                //             ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
-                //             : CircleAvatar(child: Text(c.initials())),
-                //         title: Text(c.displayName ?? ""),
-                //       );
-                //     },
-                //   )
-                : Center(
-                    child: CircularProgressCommon(),
-                  ),
-          ),
-        ],
-      )),
+                  // ListView.builder(
+                  //     itemCount: _contacts?.length ?? 0,
+                  //     itemBuilder: (BuildContext context, int index) {
+                  //       Contact c = _contacts?.elementAt(index);
+                  //       return ListTile(
+                  //         onTap: () {
+                  //           Navigator.of(context).push(MaterialPageRoute(
+                  //               builder: (BuildContext context) =>
+                  //                   ContactDetailsPage(c)));
+                  //         },
+                  //         leading: (c.avatar != null && c.avatar.length > 0)
+                  //             ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
+                  //             : CircleAvatar(child: Text(c.initials())),
+                  //         title: Text(c.displayName ?? ""),
+                  //       );
+                  //     },
+                  //   )
+                  : Center(
+                      child: CircularProgressCommon(),
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
