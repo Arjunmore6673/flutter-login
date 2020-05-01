@@ -1,9 +1,14 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutterapp/blocs/profile_bloc/profile_bloc.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
+import 'package:flutterapp/repository/user_repo.dart';
+import 'package:flutterapp/screens/common/CardCommon.dart';
 import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/screens/contact/searched_contacts.dart';
+import 'package:flutterapp/screens/relation/add_relation_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -180,9 +185,41 @@ class _ContactListPageState extends State<ContactListPage>
     }
   }
 
+  _onTapImage(BuildContext context) {
+    UserRepository _userRepository = UserRepository();
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<RelationBloc>(
+              create: (BuildContext context) => RelationBloc(_userRepository),
+            ),
+            BlocProvider<ProfileBloc>(
+              create: (BuildContext context) =>
+                  ProfileBloc(userRepository: _userRepository),
+            ),
+          ],
+          child: AddRelation(),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) => _onTapImage(context)); // Call the Dialog.
+        },
+        elevation: 10,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.blue,
+      ),
       body: SafeArea(
           child: Column(
         children: <Widget>[

@@ -303,6 +303,8 @@ class UserRepository {
 
   Future<String> uploadFile(File image) async {
     try {
+          print("-------------------------------------------------");
+  print(image.toString());
       StorageReference storageReference = FirebaseStorage.instance
           .ref()
           .child('images/${Path.basename(image.path)}}');

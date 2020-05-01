@@ -15,10 +15,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if (event is UploadImageToFirebase) {
       yield Loading();
       try {
+        print(event.url);
         String downUrl = await userRepository.uploadFile(event.url);
         yield UploadedImage(downloadUrl: downUrl);
       } catch (e) {
-        yield UploadError(error: e);
+        print(e.toString());
+        yield UploadError(error: e.toString());
       }
     }
     if (event is SaveProfileEvent) {
