@@ -338,8 +338,8 @@ class MapScreenState extends State<ProfilePage>
                             : CircleAvatarCommon(
                                 assetImage: true,
                                 url: (genderTemp == 'MALE'
-                                    ? 'assets/men.jpg'
-                                    : 'assets/women.jpg'),
+                                    ? 'assets/images/place.jpg'
+                                    : 'assets/images/place.jpg'),
                               ),
                         Positioned(
                           bottom: -25,

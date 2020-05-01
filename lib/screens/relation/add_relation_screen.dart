@@ -162,8 +162,8 @@ class _AddRelationState extends State<AddRelation> {
                                 redius: 50,
                                 assetImage: true,
                                 url: (genderTemp == 'MALE'
-                                    ? 'assets/men.jpg'
-                                    : 'assets/women.jpg'),
+                                    ? 'assets/images/place.jpg'
+                                    : 'assets/images/place.jpg'),
                               ),
                         Positioned(
                           bottom: -25,

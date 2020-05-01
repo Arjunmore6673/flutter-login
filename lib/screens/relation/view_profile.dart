@@ -167,8 +167,8 @@ class _ViewProfileState extends State<ViewProfile> {
                     ? CircleAvatarCommon(
                         assetImage: true,
                         url: (model.name == 'MALE'
-                            ? 'assets/men.jpg'
-                            : 'assets/women.jpg'),
+                            ? 'assets/images/place.jpg'
+                            : 'assets/images/place.jpg'),
                       )
                     : CircleAvatarCommon(
                         url: _uploadedFileURL,

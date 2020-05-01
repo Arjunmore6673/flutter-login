@@ -22,8 +22,8 @@ class ProfileImgAndDetails extends StatelessWidget {
               ? CircleAvatarCommon(
                   assetImage: true,
                   url: (userModel.gender == 'MALE'
-                      ? 'assets/men.jpg'
-                      : 'assets/women.jpg'))
+                      ? 'assets/images/place.jpg'
+                      : 'assets/images/place.jpg'))
               : CircleAvatarCommon(url: userModel.image),
           CardCommon(
             child: UserDeatils(mainTitle: userModel.name, widgets: [
