@@ -18,10 +18,14 @@ import 'package:path/path.dart' as Path;
 class SearchedContacts extends StatefulWidget {
   final Contact contact;
   final String relation;
+  final RelationBloc relationBloc;
   final VoidCallback onDelete;
 
   SearchedContacts(
-      {@required this.contact, this.relation, @required this.onDelete});
+      {@required this.contact,
+      this.relation,
+      @required this.onDelete,
+      this.relationBloc});
 
   @override
   _SearchedContactsState createState() => _SearchedContactsState();
@@ -82,6 +86,7 @@ class _SearchedContactsState extends State<SearchedContacts> {
                   backgroundColor: Colors.red,
                 ),
               );
+            widget.relationBloc.add(RelationListPressed(userId: -1));
             }
           },
           child: BlocBuilder<RelationBloc, RelationState>(

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/app_theme.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/custom_drawer/drawer_user_controller.dart';
 import 'package:flutterapp/custom_drawer/home_drawer.dart';
 import 'package:flutterapp/main.dart';
+import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/chat/chat_screen.dart';
 import 'package:flutterapp/screens/contact/contact_list.dart';
 import 'package:flutterapp/screens/drawer_screens/about_us.dart';
@@ -11,6 +15,21 @@ import 'package:flutterapp/screens/drawer_screens/help_screen.dart';
 import 'package:flutterapp/screens/drawer_screens/invite_friend_screen.dart';
 import 'package:flutterapp/screens/relation/relation_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+class NavigationHome extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: BlocProvider(
+          create: (context) => RelationBloc(UserRepository())
+            ..add(RelationListPressed(userId: -1)),
+          child: NavigationHomeScreen(),
+        ),
+      ),
+    );
+  }
+}
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -26,22 +45,38 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   int currentPage = 0;
 
   List<Widget> screens;
+  RelationBloc relationBloc;
+
+  @override
+  void dispose() {
+    relationBloc.close();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    RelationScreen relationScreen = new RelationScreen();
+    relationBloc = BlocProvider.of<RelationBloc>(context);
     screens = [
-      relationScreen,
-      ContactListPage(),
+      BlocProvider<RelationBloc>.value(
+        value: relationBloc,
+        child: RelationScreen(),
+      ),
+      ContactListPage(relationBloc),
       HelpScreen(),
       FeedbackScreen(),
       InviteFriend(),
       AboutUs(),
-      ChatListPage()
+      BlocProvider<RelationBloc>.value(
+        value: relationBloc,
+        child: ChatScreen(),
+      ),
     ];
     drawerIndex = DrawerIndex.HOME;
-    screenView = relationScreen;
+    screenView = BlocProvider<RelationBloc>.value(
+      value: relationBloc,
+      child: RelationScreen(),
+    );
   }
 
   @override

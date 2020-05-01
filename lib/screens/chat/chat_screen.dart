@@ -11,10 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
-import 'package:flutterapp/blocs/reln_bloc/relation_event.dart';
 import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
-import 'package:flutterapp/repository/user_repo.dart';
 import 'package:flutterapp/screens/chat/chat.dart';
 import 'package:flutterapp/screens/chat/const.dart';
 import 'package:flutterapp/screens/chat/settings.dart';
@@ -22,18 +20,6 @@ import 'package:flutterapp/screens/drawer_screens/navigation_home_screen.dart';
 import 'package:flutterapp/util/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class ChatListPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => RelationBloc(
-        UserRepository(),
-      ),
-      child: ChatScreen(),
-    );
-  }
-}
 
 /// chat screen
 
@@ -45,7 +31,6 @@ class ChatScreen extends StatefulWidget {
 
 class ChatScreenState extends State<ChatScreen> {
   ChatScreenState({Key key});
-  RelationBloc relationBloc;
 
   String currentUserId;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -59,8 +44,6 @@ class ChatScreenState extends State<ChatScreen> {
     super.initState();
     getFirebaseId();
     registerNotification();
-    relationBloc = BlocProvider.of<RelationBloc>(context);
-    relationBloc.add(RelationListPressed(userId: -1));
     configLocalNotification();
   }
 

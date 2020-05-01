@@ -1,12 +1,16 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutterapp/blocs/reln_bloc/relation_bloc.dart';
 import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/screens/contact/searched_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ContactListPage extends StatefulWidget {
+  final RelationBloc relationBloc;
+  ContactListPage(this.relationBloc);
+
   @override
   _ContactListPageState createState() => _ContactListPageState();
 }
@@ -195,16 +199,15 @@ class _ContactListPageState extends State<ContactListPage>
                   filterSearchResults(value);
                 },
                 decoration: InputDecoration(
-                  labelText: "Search",
-                  hintText: "Search",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
                     ),
-                  ),
-                  contentPadding: EdgeInsets.all(3)
-                ),
+                    contentPadding: EdgeInsets.all(3)),
               ),
             ),
           ),
@@ -226,6 +229,7 @@ class _ContactListPageState extends State<ContactListPage>
                           child: ScaleAnimation(
                             child: FadeInAnimation(
                               child: SearchedContacts(
+                                relationBloc: widget.relationBloc,
                                 contact: items[index],
                                 onDelete: () => removeItem(index),
                               ),

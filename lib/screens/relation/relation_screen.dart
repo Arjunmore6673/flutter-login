@@ -24,12 +24,7 @@ class RelationScreenState extends State<RelationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (BuildContext context) => RelationBloc(
-          UserRepository(),
-        ),
-        child: Page(),
-      ),
+      body: Page(),
     );
   }
 }

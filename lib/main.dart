@@ -52,66 +52,6 @@ void main() async {
       ));
 }
 
-class MyApp extends StatelessWidget {
-  final UserRepository userRepository;
-
-  MyApp({Key key, @required this.userRepository}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness:
-          Platform.isAndroid ? Brightness.dark : Brightness.light,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarDividerColor: Colors.grey,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
-    return MaterialApp(
-        theme: ThemeData.light(),
-        home: Scaffold(
-          backgroundColor: Colors.white,
-          body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              if (state is AuthenticationUninitialized) {
-                return SplashPage();
-              }
-              if (state is AuthenticationAuthenticated) {
-                // return AddRelation();
-                //return ViewProfile();
-                // return RelationScreen();
-                // return ContactListPage();
-                // return NavigationHomeScreen();
-                return NavigationHomeScreen();
-              }
-              if (state is AuthenticationUnauthenticated) {
-                // return RelationScreen();
-                return LoginPage(userRepository: userRepository);
-                //    return NavigationHomeScreen();
-              }
-              if (state is AuthenticationLoading) {
-                return CircularProgressCommon();
-              }
-              return Text("something wrong");
-            },
-          ),
-        ));
-  }
-}
-
-class HexColor extends Color {
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
-
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-}
-
 class MyAppNew extends StatefulWidget {
   final UserRepository userRepository;
 
@@ -162,7 +102,7 @@ class _MyAppNewState extends State<MyAppNew> {
               //  return MyHomePage();
               //  return LoginPage(userRepository: userRepository);
               // return Profile();
-              return NavigationHomeScreen();
+              return NavigationHome();
               // return SearchedContacts();
             }
             if (state is AuthenticationUnauthenticated) {
@@ -178,5 +118,17 @@ class _MyAppNewState extends State<MyAppNew> {
         ),
       ),
     );
+  }
+}
+
+class HexColor extends Color {
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
   }
 }
