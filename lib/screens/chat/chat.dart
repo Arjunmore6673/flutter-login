@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/screens/chat/const.dart';
 import 'package:flutterapp/screens/chat/fullPhoto.dart';
 import 'package:flutterapp/util/constants.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -146,7 +145,7 @@ class ChatScreenState extends State<ChatScreen> {
       setState(() {
         isLoading = false;
       });
-      Fluttertoast.showToast(msg: 'This file is not an image' + err.toString());
+      // Fluttertoast.showToast(msg: 'This file is not an image' + err.toString());
     });
   }
 
@@ -176,7 +175,6 @@ class ChatScreenState extends State<ChatScreen> {
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
-      Fluttertoast.showToast(msg: 'Nothing to send');
     }
   }
 

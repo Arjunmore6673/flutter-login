@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,10 +14,8 @@ import 'package:flutterapp/blocs/reln_bloc/relation_state.dart';
 import 'package:flutterapp/model/relation_model.dart';
 import 'package:flutterapp/screens/chat/chat.dart';
 import 'package:flutterapp/screens/chat/const.dart';
-import 'package:flutterapp/screens/chat/settings.dart';
 import 'package:flutterapp/screens/drawer_screens/navigation_home_screen.dart';
 import 'package:flutterapp/util/constants.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// chat screen
@@ -77,7 +74,7 @@ class ChatScreenState extends State<ChatScreen> {
           .document(currentUserId)
           .updateData({'pushToken': token});
     }).catchError((err) {
-      Fluttertoast.showToast(msg: err.message.toString());
+      // Fluttertoast.showToast(msg: err.message.toString());
     });
   }
 
@@ -91,12 +88,12 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   void onItemMenuPress(Choice choice) {
-    if (choice.title == 'Log out') {
-      handleSignOut();
-    } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Settings()));
-    }
+    // if (choice.title == 'Log out') {
+    //   handleSignOut();
+    // } else {
+    //   Navigator.push(
+    //       context, MaterialPageRoute(builder: (context) => Settings()));
+    // }
   }
 
   void showNotification(message) async {
@@ -228,7 +225,6 @@ class ChatScreenState extends State<ChatScreen> {
       isLoading = true;
     });
 
-    await FirebaseAuth.instance.signOut();
 
     this.setState(() {
       isLoading = false;
