@@ -100,7 +100,10 @@ class _ViewProfileState extends State<ViewProfile> {
                       ],
                     ),
                     onPressed: () => setState(() {
-                      _makePhoneCall('tel:$model.mobile');
+                      print("----------21----------------");
+                      print(model.mobile);
+                      String mobile = model.mobile;
+                      _makePhoneCall('tel:$mobile');
                     }),
                   ),
                 ),

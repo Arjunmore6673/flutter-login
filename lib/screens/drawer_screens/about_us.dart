@@ -28,7 +28,7 @@ class _AboutUsState extends State<AboutUs> {
                   height: 40,
                 ),
                 CircleAvatarCommon(
-                  url: 'assets/design_course/webInterFace.png',
+                  url: 'assets/images/Relatives.png',
                   assetImage: true,
                   redius: 70,
                 ),

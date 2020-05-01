@@ -1,19 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/blocs/profile_bloc/profile_bloc.dart';
+import 'package:flutterapp/blocs/profile_bloc/profile_event.dart';
+import 'package:flutterapp/blocs/profile_bloc/profile_state.dart'
+    as StateProfile;
+import 'package:flutterapp/blocs/profile_bloc/profile_state.dart';
 import 'package:flutterapp/blocs/registration_bloc/register_bloc.dart';
 import 'package:flutterapp/blocs/registration_bloc/register_event.dart';
 import 'package:flutterapp/blocs/registration_bloc/register_state.dart';
 import 'package:flutterapp/model/RegistrationModel.dart';
 import 'package:flutterapp/repository/user_repo.dart';
+import 'package:flutterapp/screens/common/CircleAvtarCommon.dart';
+import 'package:flutterapp/screens/common/CommonIconButton.dart';
+import 'package:flutterapp/screens/common/loading.dart';
 import 'package:flutterapp/screens/common/navigator.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-          RegistrationBloc(userRepository: UserRepository()),
+    UserRepository userRepository = UserRepository();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) =>
+              RegistrationBloc(userRepository: userRepository),
+          child: RegisterForm(context),
+        ),
+        BlocProvider<ProfileBloc>(
+          create: (BuildContext context) =>
+              ProfileBloc(userRepository: userRepository),
+        ),
+      ],
       child: RegisterForm(context),
     );
   }
@@ -39,10 +58,15 @@ class _RegisterFormState extends State<RegisterForm> {
   String radioItem = '';
   RegistrationBloc _registerBloc;
 
+  bool isLoading = false;
+  String downloadUrl = "";
+  ProfileBloc _profileBloc;
+
   @override
   void initState() {
     super.initState();
     _registerBloc = BlocProvider.of<RegistrationBloc>(context);
+    _profileBloc = BlocProvider.of<ProfileBloc>(context);
   }
 
   saveRegistration(RegistrationModel model, BuildContext context) async {
@@ -99,6 +123,7 @@ class _RegisterFormState extends State<RegisterForm> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  getImageContainer(),
                   name(),
                   emailField(),
                   village(),
@@ -106,24 +131,24 @@ class _RegisterFormState extends State<RegisterForm> {
                   mobile(),
                   passwordField(),
                   passwordField2(),
-                  Padding(
-                    padding: EdgeInsets.all(6.0),
-                    child: RaisedButton(
-                      elevation: 8,
-                      child: Text("Register"),
-                      color: Colors.white,
-                      onPressed: () {
-                        String msg = validateAndRegisterUser();
-                        if (msg != "success") {
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(msg),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        } else {}
-                      },
-                    ),
+                  Builder(
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: CommonIconButton(
+                          buttonText: "Register",
+                          color: Colors.white,
+                          onTap: () {
+                            String msg = validateAndRegisterUser();
+                            if (msg != "success") {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(msg),
+                              ));
+                            }
+                          },
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -131,6 +156,73 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
         ),
       ),
+    );
+  }
+
+  void chooseFile(BuildContext context) async {
+    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      _profileBloc.add(UploadImageToFirebase(url: image));
+    });
+  }
+
+  getImageContainer() {
+    return Stack(
+      children: <Widget>[
+        BlocBuilder<ProfileBloc, StateProfile.ProfileState>(
+          builder: (context, state) {
+            return Column(
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        state is UploadedImage
+                            ? getAvtar(state)
+                            : CircleAvatarCommon(
+                                assetImage: true,
+                                url: ('assets/images/place.jpg'),
+                              ),
+                        Positioned(
+                          bottom: -25,
+                          left: 50,
+                          child: Padding(
+                            padding: EdgeInsets.all(15),
+                            child: GestureDetector(
+                              onTap: () {
+                                chooseFile(context);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.all(10),
+                                child: Icon(
+                                  Icons.add_a_photo,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        state is StateProfile.Loading
+                            ? CircularProgressCommon()
+                            : SizedBox()
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  getAvtar(UploadedImage state) {
+    downloadUrl = state.downloadUrl;
+    return CircleAvatarCommon(
+      redius: 60,
+      url: state.downloadUrl,
     );
   }
 
@@ -271,6 +363,7 @@ class _RegisterFormState extends State<RegisterForm> {
           radioItem,
           "1996-01-15",
           _addressController.value.text,
+          downloadUrl,
         ),
       ),
     );

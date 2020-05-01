@@ -319,7 +319,6 @@ class MapScreenState extends State<ProfilePage>
   }
 
   getImageContainer() {
-    String genderTemp = "MALE";
     return Stack(
       children: <Widget>[
         BlocBuilder<ProfileBloc, ProfileState>(
@@ -337,7 +336,7 @@ class MapScreenState extends State<ProfilePage>
                             ? getAvtar(state)
                             : CircleAvatarCommon(
                                 assetImage: true,
-                                url: (genderTemp == 'MALE'
+                                url: (modelMy.gender == 'MALE'
                                     ? 'assets/images/place.jpg'
                                     : 'assets/images/place.jpg'),
                               ),

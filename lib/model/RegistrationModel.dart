@@ -6,9 +6,11 @@ class RegistrationModel {
   final String gender;
   final String dob;
   final String address;
+  final String image;
+
 
   RegistrationModel(this.name, this.mobile, this.email, this.password,
-      this.gender, this.dob, this.address);
+      this.gender, this.dob, this.address,this.image);
 
   Map toMap() {
     var map = new Map<String, dynamic>();
@@ -19,6 +21,7 @@ class RegistrationModel {
     map["password"] = password;
     map["dob"] = dob;
     map["address"] = address;
+    map["image"] = image;
     return map;
   }
 

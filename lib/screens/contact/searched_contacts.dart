@@ -86,7 +86,7 @@ class _SearchedContactsState extends State<SearchedContacts> {
                   backgroundColor: Colors.red,
                 ),
               );
-            widget.relationBloc.add(RelationListPressed(userId: -1));
+              widget.relationBloc.add(RelationListPressed(userId: -1));
             }
           },
           child: BlocBuilder<RelationBloc, RelationState>(

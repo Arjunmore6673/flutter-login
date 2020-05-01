@@ -25,11 +25,43 @@ class _ContactListPageState extends State<ContactListPage>
   List<Contact> contactsAll;
   List<Contact> deleted;
   TextEditingController editingController = TextEditingController();
+  bool isLoading = false;
   var items = List<Contact>();
   @override
   initState() {
     super.initState();
-    refreshContacts();
+    _listenForPermissionStatus();
+  }
+
+  void _listenForPermissionStatus() async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      print("status is granted ");
+      isLoading = true;
+      refreshContacts();
+    } else {
+      AlertDialog alert = AlertDialog(
+        title: Text("Contact Permissino Required"),
+        content: Text('We need Contact permission to show contact list '),
+        actions: [
+          FlatButton(
+            child: Text("OK"),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop('dialog');
+              await Permission.contacts.request();
+              _listenForPermissionStatus();
+            },
+          )
+        ],
+      );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
   }
 
   @override
@@ -140,7 +172,7 @@ class _ContactListPageState extends State<ContactListPage>
         _contacts = filteredList;
       });
       items.addAll(_contacts);
-
+      isLoading = false;
       // Lazy load thumbnails after rendering initial contacts.
 //      for (final contact in contactsAll) {
 //        ContactsService.getAvatar(contact).then((avatar) {
@@ -208,6 +240,7 @@ class _ContactListPageState extends State<ContactListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -249,7 +282,7 @@ class _ContactListPageState extends State<ContactListPage>
             ),
             Expanded(
               flex: 2,
-              child: items != null
+              child: items != null || !isLoading
                   ? GridView.count(
                       padding: EdgeInsets.all(14),
                       childAspectRatio: MediaQuery.of(context).size.width /
@@ -275,27 +308,7 @@ class _ContactListPageState extends State<ContactListPage>
                         },
                       ),
                     )
-
-                  // ListView.builder(
-                  //     itemCount: _contacts?.length ?? 0,
-                  //     itemBuilder: (BuildContext context, int index) {
-                  //       Contact c = _contacts?.elementAt(index);
-                  //       return ListTile(
-                  //         onTap: () {
-                  //           Navigator.of(context).push(MaterialPageRoute(
-                  //               builder: (BuildContext context) =>
-                  //                   ContactDetailsPage(c)));
-                  //         },
-                  //         leading: (c.avatar != null && c.avatar.length > 0)
-                  //             ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
-                  //             : CircleAvatar(child: Text(c.initials())),
-                  //         title: Text(c.displayName ?? ""),
-                  //       );
-                  //     },
-                  //   )
-                  : Center(
-                      child: CircularProgressCommon(),
-                    ),
+                  : Center(child: CircularProgressCommon()),
             ),
           ],
         ),
@@ -308,10 +321,28 @@ class _ContactListPageState extends State<ContactListPage>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> list = prefs.getStringList("DELETED");
     if (list == null) list = [];
-    list.add(_contacts[index].displayName);
+    list.add(items[index].displayName);
     await prefs.setStringList("DELETED", list);
     setState(() {
-      _contacts = List.from(_contacts)..removeAt(index);
+      items = List.from(items)..removeAt(index);
     });
   }
 }
+
+// ListView.builder(
+//     itemCount: _contacts?.length ?? 0,
+//     itemBuilder: (BuildContext context, int index) {
+//       Contact c = _contacts?.elementAt(index);
+//       return ListTile(
+//         onTap: () {
+//           Navigator.of(context).push(MaterialPageRoute(
+//               builder: (BuildContext context) =>
+//                   ContactDetailsPage(c)));
+//         },
+//         leading: (c.avatar != null && c.avatar.length > 0)
+//             ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
+//             : CircleAvatar(child: Text(c.initials())),
+//         title: Text(c.displayName ?? ""),
+//       );
+//     },
+//   )

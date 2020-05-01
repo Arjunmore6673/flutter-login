@@ -18,7 +18,7 @@ class ProfileImgAndDetails extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          (userModel.image == null)
+          (userModel.image == null || userModel.image == "")
               ? CircleAvatarCommon(
                   assetImage: true,
                   url: (userModel.gender == 'MALE'

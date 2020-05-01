@@ -38,6 +38,7 @@ class UserRepository {
       headers: headers,
       body: json.encode({
         "email": model.email,
+        "image": model.image,
         "mobile": model.mobile,
         "password": model.password,
         "name": model.name,

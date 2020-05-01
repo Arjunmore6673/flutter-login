@@ -14,19 +14,14 @@ import 'package:flutterapp/screens/drawer_screens/feedback_screen.dart';
 import 'package:flutterapp/screens/drawer_screens/help_screen.dart';
 import 'package:flutterapp/screens/drawer_screens/invite_friend_screen.dart';
 import 'package:flutterapp/screens/relation/relation_screen.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class NavigationHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: BlocProvider(
-          create: (context) => RelationBloc(UserRepository())
-            ..add(RelationListPressed(userId: -1)),
-          child: NavigationHomeScreen(),
-        ),
-      ),
+    return BlocProvider(
+      create: (context) =>
+          RelationBloc(UserRepository())..add(RelationListPressed(userId: -1)),
+      child: NavigationHomeScreen(),
     );
   }
 }
@@ -43,7 +38,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
 
   GlobalKey bottomNavigationKey = GlobalKey();
   int currentPage = 0;
-
   List<Widget> screens;
   RelationBloc relationBloc;
 
@@ -107,9 +101,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           bottomNavigationBar: AnimatedBottomNav(
             currentIndex: currentPage,
             onChange: (index) {
-              if (index == 1) {
-                _listenForPermissionStatus();
-              }
               setState(() {
                 currentPage = index;
               });
@@ -148,33 +139,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         ),
       ),
     );
-  }
-
-  void _listenForPermissionStatus() async {
-    var status = await Permission.contacts.status;
-    if (status.isGranted) {
-      print("status is granted ");
-    } else {
-      AlertDialog alert = AlertDialog(
-        title: Text("Contact Permissino Required"),
-        content: Text('We need Contact permission to show contact list '),
-        actions: [
-          FlatButton(
-            child: Text("OK"),
-            onPressed: () {
-              Permission.contacts.request();
-            },
-          )
-        ],
-      );
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
-    }
   }
 
   void changeIndex(DrawerIndex drawerIndexdata) {
